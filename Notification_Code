@@ -1,7 +1,7 @@
 import time
 from plyer import notification
 
-def remind_to_drink_water(interval_minutes=30):
+def remind_to_drink_water(interval_minutes=45):
     while True:
         notification.notify(
             title="💧 Hydration Reminder",
