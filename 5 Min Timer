@@ -1,0 +1,46 @@
+import tkinter as tk
+from threading import Thread
+from plyer import notification
+import time
+
+# Function to show the timer window
+def show_timer(duration=300):
+    def countdown():
+        remaining = duration
+        while remaining > 0:
+            mins, secs = divmod(remaining, 60)
+            timer_label.config(text=f"{mins:02}:{secs:02}")
+            time.sleep(1)
+            remaining -= 1
+        timer_label.config(text="Time's up!")
+
+    timer_window = tk.Toplevel()
+    timer_window.title("5 Minute Timer")
+    timer_window.geometry("200x100")
+    timer_label = tk.Label(timer_window, text="", font=("Helvetica", 32))
+    timer_label.pack(expand=True)
+
+    Thread(target=countdown, daemon=True).start()
+
+# Function to simulate notification + timer
+def trigger_notification():
+    notification.notify(
+        title="New Notification",
+        message="You just received a notification!",
+        timeout=5
+    )
+    show_timer()
+
+# Main GUI app to trigger notifications
+def main():
+    root = tk.Tk()
+    root.title("Notification Timer App")
+    root.geometry("300x150")
+
+    btn = tk.Button(root, text="Trigger Notification", command=trigger_notification)
+    btn.pack(pady=50)
+
+    root.mainloop()
+
+if __name__ == "__main__":
+    main()
