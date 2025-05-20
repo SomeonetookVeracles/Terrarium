@@ -7,7 +7,7 @@ let x = 10;
 let dx = 2;
 
 function draw() {
-    ctx.fillStyle = 'black';
+    ctx.fillStyle = 'red';
     ctx.fillRect(0, 0, canvas.width, canvas.height); // Kind of cursed way of doing it, should probably fix in final version.
     ctx.fillStyle - 'red';
     ctx.beginPath();

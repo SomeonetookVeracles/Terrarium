@@ -12,8 +12,8 @@ function createWindow() {
   const display = screen.getPrimaryDisplay();
   const { width: screenWidth, height: screenHeight } = display.workAreaSize;
 
-  const widthpercent = 0.15;  //VAR - 15% width
-  const heightpercent = 0.20; //VAR - 20% height
+  const widthpercent = 0.20;  //VAR - 15% width
+  const heightpercent = 0.40; //VAR - 20% height
 
   const windowWidth = Math.floor(screenWidth * widthpercent);
   const windowHeight = Math.floor(screenHeight * heightpercent);
@@ -24,8 +24,8 @@ function createWindow() {
   win = new BrowserWindow({
     width: windowWidth,
     height: windowHeight,
-    x: posX,            // ✅ Set initial position here
-    y: posY,            // ✅ Avoid using setPosition later
+    x: posX,
+    y: posY,
     frame: false,
     transparent: false,
     alwaysOnTop: true,
@@ -40,7 +40,6 @@ function createWindow() {
 
   win.loadFile('index.html');
 
-  // Optional: ensure proper final bounds after ready-to-show
   win.once('ready-to-show', () => {
     win.setBounds({ x: posX, y: posY, width: windowWidth, height: windowHeight });
   });
@@ -64,7 +63,7 @@ function toggleWindow() {//If the window is visible, on close it will minimize
 function createTray() {
   tray = new Tray(path.join(__dirname, 'placeholder_images', 'temptrayimg.ico'));
 
-  const contextMenu = Menu.buildFromTemplate([ //Fixed menu references, ask before messing
+  const contextMenu = Menu.buildFromTemplate([ //Fixed menu references, ask before messing with
     {label: 'Toggle Window', click: toggleWindow }, //Activates togglewindow function
     {type: 'separator'},
     {label: 'quit', click: () => app.quit() }
