@@ -1,0 +1,14 @@
+import time
+from plyer import notification
+
+def remind_to_eat_a_snack(interval_minutes=60):
+    while True:
+        notification.notify(
+            title="Snack Time!",
+            message="It's time to eat a snack!",
+            timeout=10
+        )
+        time.sleep(interval_minutes * 60)  # Convert minutes to seconds
+        if_name=="__main__":
+            remind_to_eat_a_snack()
+# This code will run indefinitely, sending a notification every hour.
