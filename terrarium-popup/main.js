@@ -1,10 +1,16 @@
 //This is the main javascript file for the electron stuff
 //It includes the positioning of the window, the scaling,
-//as well as activating the HTML files through index.html
+//And activating the HTML files through index.html
 
-const {app, BrowserWindow, Tray, Menu, screen} = require('electron');
-const path = require('path')
+const { app, BrowserWindow, Tray, Menu, screen } = require('electron');
+const path = require('path');
 const readline = require('readline');
+
+//  Load config
+const config = require('./config.json');
+//  Global Variables
+global.DEVMODE = config.devMode; 
+
 let win;
 let tray;
 
@@ -12,11 +18,11 @@ function createWindow() {
   const display = screen.getPrimaryDisplay();
   const { width: screenWidth, height: screenHeight } = display.workAreaSize;
 
-  const widthpercent = 0.20;  //VAR - 15% width
-  const heightpercent = 0.40; //VAR - 20% height
+  const widthPercent = config.window.widthPercent;
+  const heightPercent = config.window.heightPercent;
 
-  const windowWidth = Math.floor(screenWidth * widthpercent);
-  const windowHeight = Math.floor(screenHeight * heightpercent);
+  const windowWidth = Math.floor(screenWidth * widthPercent);
+  const windowHeight = Math.floor(screenHeight * heightPercent);
 
   const posX = Math.max(0, screenWidth - windowWidth);
   const posY = Math.max(0, screenHeight - windowHeight);
@@ -31,7 +37,7 @@ function createWindow() {
     alwaysOnTop: true,
     resizable: false,
     skipTaskbar: true,
-    show: false,
+    show: !config.startMinimized, //  Show window based on config
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false
@@ -40,35 +46,51 @@ function createWindow() {
 
   win.loadFile('index.html');
 
-  win.once('ready-to-show', () => {
-    win.setBounds({ x: posX, y: posY, width: windowWidth, height: windowHeight });
-  });
-
   win.on('close', (event) => {
     event.preventDefault();
     win.hide();
   });
+
+  if (global.DEVMODE) {
+    win.webContents.openDevTools({ mode: 'detach' }); // Optional dev tool auto-open
+  }
 }
-function toggleWindow() {//If the window is visible, on close it will minimize
+
+function toggleWindow() {
   if (!win) return;
 
   if (win.isVisible()) {
     win.hide();
   } else {
     win.show();
-    win.focus(); //Shows window and puts into focus on activation
+    win.focus();
   }
 }
 
 function createTray() {
   tray = new Tray(path.join(__dirname, 'placeholder_images', 'temptrayimg.ico'));
 
-  const contextMenu = Menu.buildFromTemplate([ //Fixed menu references, ask before messing with
-    {label: 'Make Visible', click: toggleWindow }, //Activates togglewindow function
-    {type: 'separator'},
-    {label: 'Quit', click: () => app.quit() }
-  ]);
-  tray.setToolTip('Terrarium'); //Widget Title
+  // ✅ Base context menu
+  const contextMenuTemplate = [
+    { label: 'Toggle Window', click: toggleWindow },
+    { type: 'separator' }
+  ];
+
+  //  Add dev options if enabled
+  if (global.DEVMODE) {
+    contextMenuTemplate.push(
+      { label: 'Reload', click: () => win.reload() },
+      { label: 'Open DevTools', click: () => win.webContents.openDevTools() },
+      { type: 'separator' }
+    );
+  }
+
+  // ✅ Final menu
+  contextMenuTemplate.push({ label: 'Quit', click: () => app.quit() });
+
+  const contextMenu = Menu.buildFromTemplate(contextMenuTemplate);
+
+  tray.setToolTip('Terrarium');
   tray.setContextMenu(contextMenu);
   tray.on('click', toggleWindow);
 }
@@ -81,13 +103,12 @@ app.whenReady()
   .catch(err => {
     console.error('Startup Error:', err.message);
 
-    //prompting user
     const rl = readline.createInterface({
       input: process.stdin,
       output: process.stdout
     });
 
-    rl.question('An error occurred. Do you want to exit? (y/n): ', (answer) => {
+    rl.question('An error occurred. Do you want to quit the app? (y/n): ', (answer) => {
       if (answer.trim().toLowerCase() === 'y') {
         console.log('Exiting...');
         app.quit();
@@ -98,8 +119,6 @@ app.whenReady()
     });
   });
 
-//Keep app running when windows closed
 app.on('window-all-closed', (e) => {
   e.preventDefault();
 });
-

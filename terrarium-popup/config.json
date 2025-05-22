@@ -1,0 +1,8 @@
+{
+  "window": {
+    "widthPercent": 0.15,
+    "heightPercent": 0.20
+  },
+  "devMode": true,
+  "startMinimized": true
+}
