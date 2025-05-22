@@ -10,7 +10,7 @@ if %ERRORLEVEL% neq 0 (
     powershell -Command "Invoke-WebRequest -Uri %NODE_URL% -OutFile %NODE_INSTALLER"
     msiexec /i %NODE_INSTALLER% /quiet /norestart
     del %NODE_INSTALLER%
-    timeout /t 15
+    timeout /t 10
 )
 
 if not exist package.json (
@@ -20,7 +20,6 @@ if not exist package.json (
 )
 
 echo Installing dependencies...
-timeout /t 10
 echo Installing node...
 npm install 
 

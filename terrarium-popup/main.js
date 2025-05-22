@@ -64,9 +64,9 @@ function createTray() {
   tray = new Tray(path.join(__dirname, 'placeholder_images', 'temptrayimg.ico'));
 
   const contextMenu = Menu.buildFromTemplate([ //Fixed menu references, ask before messing with
-    {label: 'Toggle Window', click: toggleWindow }, //Activates togglewindow function
+    {label: 'Make Visible', click: toggleWindow }, //Activates togglewindow function
     {type: 'separator'},
-    {label: 'quit', click: () => app.quit() }
+    {label: 'Quit', click: () => app.quit() }
   ]);
   tray.setToolTip('Terrarium'); //Widget Title
   tray.setContextMenu(contextMenu);
