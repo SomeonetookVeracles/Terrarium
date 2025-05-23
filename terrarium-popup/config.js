@@ -8,7 +8,7 @@ function loadConfig() {
     try {
         return JSON.parse(fs.readFileSync(configPath, 'utf-8'));
     } catch (e) {
-        console.error('failed to load config, dumbass', e);
+        console.error('failed to load config', e);
             return{};
         }
     }
@@ -17,7 +17,7 @@ function saveConfig(config) {
     try {
         fs.writeFileSync(configPath, JSON.stringify(config, null, 2), 'utf-8');
     } catch (e) {
-        console.error('failed to write to config, you did a fucky wucky', e);
+        console.error('Failed to write to config', e);
     }
 }
 
@@ -25,4 +25,4 @@ module.exports = {
     loadConfig,
     saveConfig,
     configPath,
-}
+};

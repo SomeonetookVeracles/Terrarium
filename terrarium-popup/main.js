@@ -4,23 +4,26 @@
 
 const { app, BrowserWindow, Tray, Menu, screen } = require('electron');
 const path = require('path');
-const readline = require('readline'); // ✅ Correct lowercase variable
-
+const readline = require('readline');
+const configUtils = require ('./config.js');
+const config = configUtils.loadConfig(); //Activates the config file
 let win;
 let tray;
 
 function createWindow() { //  Includes togglewindow and browserwindow functions
   const display = screen.getPrimaryDisplay();
   const { width: screenWidth, height: screenHeight } = display.workAreaSize;
-
-  const widthpercent = 0.20;  //VAR - 15% width
-  const heightpercent = 0.50; //VAR - 20% height
+  //Read from json file
+  const widthPercent = config.window?.widthPercent ?? 0.20;
+  const heightPercent = config.window?.heightPercent ?? 0.5;
+  //const widthPercent = 0.20;  //VAR - 15% width OLD CODE KILL ME
+  //const heightPercent = 0.50; //VAR - 20% height
 
   //Multiplies screen size (pixels) by percentage
-  const windowWidth = Math.floor(screenWidth * widthpercent);
-  const windowHeight = Math.floor(screenHeight * heightpercent);
+  const windowWidth = Math.floor(screenWidth * widthPercent);
+  const windowHeight = Math.floor(screenHeight * heightPercent);
 
-  // Defensive: make sure the sizes are numbers
+  // Make sure the sizes is a number
   if (isNaN(windowWidth) || isNaN(windowHeight)) {
     throw new Error('Window dimensions are invalid.');
   }
@@ -76,7 +79,7 @@ function createTray() {
         {
           label: 'Notifications',
           type: 'checkbox',
-          chcked: true,
+          checked: true,
           click: (menuItem) => {
             console.log('Notifications toggled:', menuItem.checked);
             //TODO - SAVE SETTING TO GLOBAL VARIABLE
@@ -88,19 +91,19 @@ function createTray() {
             {
               label: 'Light',
               type: 'radio',
-              checked: true,
+              checked: config.theme === 'light',
               click: () => console.log('Theme set to Light')
             },
             {
               label: 'Dark',
               type: 'radio',
-              checked: true, 
+              checked: config.theme === 'dark',
               click: () => console.log('Theme set to Dark')
             },
             {
               label: 'System Default',
               type: 'radio',
-              checked: true,
+              checked: config.theme === 'sysDefault',
               click: () => console.log('Theme set to sysdefault')
 
             }
@@ -116,7 +119,7 @@ function createTray() {
   tray.on('click', toggleWindow);
 }
 
-// ✅ App startup with interactive error handling
+// REWRITE, Doesn't close unless forced to
 app.whenReady()
   .then(() => {
     createWindow();
