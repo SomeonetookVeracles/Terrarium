@@ -1,0 +1,62 @@
+/* styles.css */
+
+body {
+    background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.loading-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.spinner {
+    border: 8px solid #f3f3f3;
+    border-top: 8px solid #6a82fb;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    animation: spin 1s linear infinite;
+    margin-bottom: 20px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.loading-text {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 1.5rem;
+    color: #333;
+    letter-spacing: 2px;
+}
+.pl,
+.pl__worm {
+    animation-duration:3s;
+    animation-iteration-count:infinite;
+}
+.pl {
+    animation-name: bump;
+    animation-timing-function: ease-in-out;
+    width: 8em;
+    height: 8em;
+}
+.pl__ring {
+    stroke: hsla(var(--hue), 10%, 10%, 0.1);
+    transition: stroke 0.3s;
+}
+.pl__worm {
+    animation-name: worm;
+    animation-timing-function: cubic-bezier(0.42,0.17,0.75,0.83);
+}
+@keyframes worm {
+    from {stroke-dashoffset: 10;}
+    25%{stroke-dashoffset: 295;}
+    to{stroke-dashoffset: 1165;}
+}
