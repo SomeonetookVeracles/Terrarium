@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Terrarium Image</title>
+</head>
+<body>
+<div class="container">
+    <svg
+        id="flower-frame"
+        version="1.1"
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 641.5 637.3">
+    <style type="text/css"> 
+    </style>
+    <defs></defs>
+    <g id="Footer_group_1_">
