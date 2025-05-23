@@ -71,6 +71,43 @@ function createTray() {
   const contextMenu = Menu.buildFromTemplate([ // ✅ FIXED: Corrected Menu reference
     { label: 'Toggle Window', click: toggleWindow }, //Activates togglewindow function
     { type: 'separator' },
+    { label: 'Options', //Dropdown menu
+      submenu: [
+        {
+          label: 'Notifications',
+          type: 'checkbox',
+          chcked: true,
+          click: (menuItem) => {
+            console.log('Notifications toggled:', menuItem.checked);
+            //TODO - SAVE SETTING TO GLOBAL VARIABLE
+          }
+        },
+        {
+          label: 'Theme',
+          submenu: [
+            {
+              label: 'Light',
+              type: 'radio',
+              checked: true,
+              click: () => console.log('Theme set to Light')
+            },
+            {
+              label: 'Dark',
+              type: 'radio',
+              checked: true, 
+              click: () => console.log('Theme set to Dark')
+            },
+            {
+              label: 'System Default',
+              type: 'radio',
+              checked: true,
+              click: () => console.log('Theme set to sysdefault')
+
+            }
+          ]
+        }
+      ]   
+    },
     { label: 'Quit', click: () => app.quit() }
   ]);
 
