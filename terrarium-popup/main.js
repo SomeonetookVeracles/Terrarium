@@ -4,97 +4,82 @@
 
 const { app, BrowserWindow, Tray, Menu, screen } = require('electron');
 const path = require('path');
-const readline = require('readline');
-
-//  Load config
-const config = require('./config.json');
-//  Global Variables
-global.DEVMODE = config.devMode; 
+const readline = require('readline'); // ✅ Correct lowercase variable
 
 let win;
 let tray;
 
-function createWindow() {
+function createWindow() { //  Includes togglewindow and browserwindow functions
   const display = screen.getPrimaryDisplay();
   const { width: screenWidth, height: screenHeight } = display.workAreaSize;
 
-  const widthPercent = config.window.widthPercent;
-  const heightPercent = config.window.heightPercent;
+  const widthpercent = 0.20;  //VAR - 15% width
+  const heightpercent = 0.50; //VAR - 20% height
 
-  const windowWidth = Math.floor(screenWidth * widthPercent);
-  const windowHeight = Math.floor(screenHeight * heightPercent);
+  //Multiplies screen size (pixels) by percentage
+  const windowWidth = Math.floor(screenWidth * widthpercent);
+  const windowHeight = Math.floor(screenHeight * heightpercent);
 
-  const posX = Math.max(0, screenWidth - windowWidth);
-  const posY = Math.max(0, screenHeight - windowHeight);
+  // Defensive: make sure the sizes are numbers
+  if (isNaN(windowWidth) || isNaN(windowHeight)) {
+    throw new Error('Window dimensions are invalid.');
+  }
 
   win = new BrowserWindow({
     width: windowWidth,
     height: windowHeight,
-    x: posX,
-    y: posY,
     frame: false,
     transparent: false,
     alwaysOnTop: true,
     resizable: false,
     skipTaskbar: true,
-    show: !config.startMinimized, //  Show window based on config
+    show: false,
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false
     }
   });
 
+  // Position in bottom-right corner, with extra safety
+  const posX = Math.max(0, screenWidth - windowWidth);
+  const posY = Math.max(0, screenHeight - windowHeight);
+  win.setPosition(posX, posY);
+
   win.loadFile('index.html');
 
+  // Prevent window closing, minimizing to taskbar instead
   win.on('close', (event) => {
     event.preventDefault();
     win.hide();
   });
-
-  if (global.DEVMODE) {
-    win.webContents.openDevTools({ mode: 'detach' }); // Optional dev tool auto-open
-  }
 }
 
-function toggleWindow() {
+function toggleWindow() { //  Includes logic for opening and closing window
   if (!win) return;
 
-  if (win.isVisible()) {
+  if (win.isVisible()) { //If the window is visible, on close it will minimize
     win.hide();
   } else {
     win.show();
-    win.focus();
+    win.focus(); //Shows window and puts into focus on activation
   }
 }
 
 function createTray() {
   tray = new Tray(path.join(__dirname, 'placeholder_images', 'temptrayimg.ico'));
 
-  // ✅ Base context menu
-  const contextMenuTemplate = [
-    { label: 'Toggle Window', click: toggleWindow },
-    { type: 'separator' }
-  ];
+  const contextMenu = Menu.buildFromTemplate([ // ✅ FIXED: Corrected Menu reference
+    { label: 'Toggle Window', click: toggleWindow }, //Activates togglewindow function
+    { type: 'separator' },
+    { label: 'Quit', click: () => app.quit() }
+  ]);
 
-  //  Add dev options if enabled
-  if (global.DEVMODE) {
-    contextMenuTemplate.push(
-      { label: 'Reload', click: () => win.reload() },
-      { label: 'Open DevTools', click: () => win.webContents.openDevTools() },
-      { type: 'separator' }
-    );
-  }
-
-  // ✅ Final menu
-  contextMenuTemplate.push({ label: 'Quit', click: () => app.quit() });
-
-  const contextMenu = Menu.buildFromTemplate(contextMenuTemplate);
-
-  tray.setToolTip('Terrarium');
+  tray.setToolTip('Terrarium'); //Title of widget
   tray.setContextMenu(contextMenu);
   tray.on('click', toggleWindow);
 }
 
+// ✅ App startup with interactive error handling
 app.whenReady()
   .then(() => {
     createWindow();
@@ -119,6 +104,7 @@ app.whenReady()
     });
   });
 
+//Keep app running when windows closed
 app.on('window-all-closed', (e) => {
   e.preventDefault();
 });
