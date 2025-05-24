@@ -1,0 +1,22 @@
+import time
+import tkinter as tk
+from tkinter import messagebox
+import pyautogui
+
+def notify_and_screenshot():
+    # Create a simple popup notification
+    root = tk.Tk()
+    root.withdraw()  # Hide the main window
+    messagebox.showinfo("You've coded for 1 hour!", "Taking a screenshot in 5 seconds...")
+    
+    # Wait for 5 seconds
+    time.sleep(5)
+    
+    # Take a screenshot
+    screenshot = pyautogui.screenshot()
+    
+    # Save the screenshot
+    screenshot.save("screenshot.png")
+    
+    # Notify the user that the screenshot has been taken
+    messagebox.showinfo("Screenshot was taken! Great job!", "Screenshot saved as 'screenshot.png'.")
