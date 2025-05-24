@@ -3,9 +3,9 @@ Terrarium
 
 Installation:
 git clone https://github.com/SomeonetookVeracles/Terrarium.git
-cd terrarium
-pip install -r requirements.txt
-python terrarium.py
+->cd terrarium
+->pip install -r requirements.txt
+->python terrarium.py.
 
 Modifications:
 You can modify the intervals and screenshot behavior in config.json
@@ -21,7 +21,7 @@ All screenshots are saved in the "screenshots" folder by default.
 Dependencies
 plyer - for cross-platform notifications
 pyautogui - for screenshots
-datetime and os - time and file management
+datetime and os - time and file management.
     To install these dependencies:
     pip install -r requirements.txt
 
@@ -29,5 +29,5 @@ License:
     Licensed under the Apache License 2.0
 
 Authors:
-    SomeonetookVeracles & CitrusB1
+    SomeonetookVeracles & CitrusB1. 
                                                     Happy Hacking!
