@@ -1,0 +1,45 @@
+import time
+import tkinter as tk
+from tkinter import messagebox
+
+after 3660 seconds (1 hour), this script will notify the user and take a screenshot.
+def notify
+    # Create a simple popup notification
+    root = tk.Tk()
+    root.withdraw()  # Hide the main window
+    messagebox.showinfo("You've coded for 1 hour!")
+    
+def get_yes_no_input(prompt="Do you want to take a break? (yes/no): "):
+    while True:
+        user_input = input(prompt).strip().lower()
+        if user_input in ['yes', 'y']:
+            return True
+        elif user_input in ['no', 'n']:
+            return False
+        else:
+            print("Please enter 'yes' or 'no'.")
+
+# Example usage
+if get_yes_no_input():
+    print("You selected yes. Enjoy your break!")
+    print("You selected no. Keep coding!")
+
+    import sys
+
+def get_yes_no_input(prompt="Do you want to exit the application? (ys/no): "):
+    while True:
+        user_input = input(prompt).strip().lower()
+        if user_input in ['yes', 'y']:
+            return True
+        elif user_input in ['no', 'n']:
+            return False
+        else:
+            print("Please enter 'yes' or 'no'.")
+
+# Main program
+if get_yes_no_input():
+    print("You selected yesxiting the application.")
+    sys.exit()
+
+# Continue the application if user said no
+print("You selected no. ntinuing the application...")
