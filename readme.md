@@ -2,10 +2,7 @@ Terrarium
     Terrarium is a productivity companion that allows coders in the Hack Club base to stay on track while having a small terrarium that grows as they code. This project reminds users to drink water every 45 minutes and eat a snack every hour. It also automatically takes a screenshot of your screen every hour so you don't forget to have a picture of your project to put into Hack_Hour on Slack!
 
 Installation:
-git clone https://github.com/SomeonetookVeracles/Terrarium.git
-->cd terrarium
-->pip install -r requirements.txt
-->python terrarium.py.
+Because compiling stuff is boring and we're constantly pushing incremental updates, you will have to install electron, node.js, and a few other dependencies in the terrarium-popup folder, the batch file is currently broken
 
 Modifications:
 You can modify the intervals and screenshot behavior in config.json

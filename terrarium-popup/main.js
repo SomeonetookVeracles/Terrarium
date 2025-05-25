@@ -2,6 +2,7 @@
 //It includes the positioning of the window, the scaling,
 //And activating the HTML files through index.html
 
+// #region Constants
 const { app, BrowserWindow, Tray, Menu, screen } = require('electron');
 const path = require('path');
 const readline = require('readline');
@@ -9,13 +10,13 @@ const configUtils = require ('./config.js');
 const config = configUtils.loadConfig(); //Activates the config file
 let win;
 let tray;
-
+// #endregion 
 function createWindow() { //  Includes togglewindow and browserwindow functions
   const display = screen.getPrimaryDisplay();
   const { width: screenWidth, height: screenHeight } = display.workAreaSize;
   //Read from json file
-  const widthPercent = config.window?.widthPercent ?? 0.20;
-  const heightPercent = config.window?.heightPercent ?? 0.5;
+  const widthPercent = config.window?.widthPercent;
+  const heightPercent = config.window?.heightPercent;
   //const widthPercent = 0.20;  //VAR - 15% width OLD CODE KILL ME
   //const heightPercent = 0.50; //VAR - 20% height
 
@@ -111,7 +112,7 @@ function createTray() {
         }
       ]   
     },
-    { label: 'Quit', click: () => app.quit() }
+    { label: 'Quit', click: () => process.exit(0) }
   ]);
 
   tray.setToolTip('Terrarium'); //Title of widget
@@ -119,7 +120,7 @@ function createTray() {
   tray.on('click', toggleWindow);
 }
 
-// REWRITE, Doesn't close unless forced to
+// #region App Logic
 app.whenReady()
   .then(() => {
     createWindow();
@@ -143,7 +144,7 @@ app.whenReady()
       }
     });
   });
-
+// #endregion App Logic
 //Keep app running when windows closed
 app.on('window-all-closed', (e) => {
   e.preventDefault();
