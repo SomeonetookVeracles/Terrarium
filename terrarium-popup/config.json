@@ -1,0 +1,11 @@
+{
+    "window": {
+        "widthPercent": 0.2,
+        "heightPercent": 0.5,
+        "startMinimized": true
+    },
+    "NOTICE": "THEME, DEVMODE, NOTIFICAtIONS CURRENTLY DOES NOTHING",
+    "theme": "dark", 
+    "notifStatus": true, 
+    "devMode": false
+}
