@@ -1,9 +1,12 @@
 import sys
+import threading
 from PyQt5.QtWidgets import (
     QApplication, QWidget, QMainWindow, QPushButton, QVBoxLayout, QHBoxLayout, QStackedLayout, QLabel
 )
 from PyQt5.QtCore import Qt, QRect 
 from PyQt5.QtGui import QColor, QPalette 
+from PIL import Image, ImageDraw
+from pystray import Icon, MenuItem, Menu
 
 #   Page Classes ---> Put new pages here.
 class MainPage(QWidget):
@@ -92,9 +95,29 @@ class TerrariumUI(QMainWindow):
     def closeEvent(self, event):
         event.ignore()
         self.showMinimized()
+def create_tray_icon():
+        icon_image = Image.new("RGB", (64, 64), "red")
+        draw = ImageDraw.Draw(icon_image)
+        draw.ellipse((16, 16, 48, 48), fill="white")
+
+        def on_open(icon, item):
+            window.showNormal()
+            window.raise_()
+            window.activateWindow()
+
+        def on_exit(icon, item):
+            icon.stop()
+            app.quit()
+
+        return Icon("Terrarium", icon_image, "Terrarium", menu=Menu(
+            MenuItem("Open", on_open),
+            MenuItem("Exit", on_exit)
+        ))
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     window = TerrariumUI()
-    window.show()
+    window.hide()
+    tray_thread = threading.Thread(target=lambda: create_tray_icon().run(), daemon=True)
+    tray_thread.start()
     sys.exit(app.exec_())
