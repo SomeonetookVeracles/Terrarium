@@ -4,30 +4,22 @@ from PyQt5.QtWidgets import (
     QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout,
     QPushButton, QLabel, QStackedLayout, QSystemTrayIcon, QMenu, QAction
 )
-from PyQt5.QtGui import QIcon, QPixmap, QColor, QPainter
+from PyQt5.QtGui import QIcon, QPixmap, QColor
 from PyQt5.QtCore import Qt, QRect
 from config_helper import load_config
+from settings_page import SettingsPage
+
 config = load_config()
 
-#   Pages
-# TODO ---> Add more pages
 class MainPage(QWidget):
     def __init__(self):
         super().__init__()
         layout = QVBoxLayout()
-        layout.addWidget(QLabel("🌱 Welcome to Terrarium"))
+        label = QLabel("🌱 Welcome to Terrarium")
+        layout.addWidget(label)
+        layout.addStretch()
         self.setLayout(layout)
 
-
-class SettingsPage(QWidget):
-    def __init__(self):
-        super().__init__()
-        layout = QVBoxLayout()
-        layout.addWidget(QLabel("⚙️ Settings Page"))
-        self.setLayout(layout)
-
-
-#   Main App
 class TerrariumUI(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -40,10 +32,7 @@ class TerrariumUI(QMainWindow):
         self.setWindowTitle("Terrarium")
         self.setWindowFlags(Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint)
 
-        #   Flags
-        flags = Qt.FramelessWindowHint
-        if config["DISPLAY"].get("DARKMODE", False):
-            self.setStyleSheet("background-color: #2E3440; color: white;")
+        # Geometry based on DISPLAY config
         screen = QApplication.primaryScreen().availableGeometry()
         width = int(screen.width() * config["DISPLAY"]["width_ratio"])
         height = int(screen.height() * config["DISPLAY"]["height_ratio"])
@@ -51,23 +40,22 @@ class TerrariumUI(QMainWindow):
         y = screen.height() - height
         self.setGeometry(QRect(x, y, width, height))
 
-        #   Sidebar
+        # Sidebar setup
         sidebar_widget = QWidget()
         sidebar_widget.setFixedWidth(120)
-        sidebar_widget.setStyleSheet("background-color: #2E3440; border-right: 1px solid #444;")
+        sidebar_widget.setObjectName("sidebar")
         sidebar_widget.setLayout(self.sidebar_layout)
-        self.sidebar_layout.addStretch()
 
-        #   Stacked Pages
+        # Stacked content area
         stacked_widget = QWidget()
         stacked_widget.setLayout(self.pages)
-        stacked_widget.setStyleSheet("background-color: #ECEFF4; padding: 20px;")
+        stacked_widget.setObjectName("content")
 
-        #   Add Pages
+        # Add pages
         self.add_page("Main", MainPage)
         self.add_page("Settings", SettingsPage)
 
-        #   Combine Layout
+        # Combine into main layout
         main_layout = QHBoxLayout()
         main_layout.addWidget(sidebar_widget)
         main_layout.addWidget(stacked_widget)
@@ -80,32 +68,19 @@ class TerrariumUI(QMainWindow):
         page = widget_class()
         index = self.pages.count()
         self.pages.addWidget(page)
+
         btn = QPushButton(name)
         btn.setCursor(Qt.PointingHandCursor)
-        btn.setMinimumHeight(40)
-        btn.setStyleSheet("""
-            QPushButton {
-                color: white;
-                background-color: #3B4252;
-                border: none;
-                padding: 10px;
-                text-align: left;
-            }
-            QPushButton:hover {
-                background-color: #434C5E;
-            }
-        """)
+        btn.setObjectName("sidebar-button")
         btn.clicked.connect(lambda: self.pages.setCurrentIndex(index))
         self.sidebar_layout.insertWidget(index, btn)
 
     def init_tray(self):
         self.tray = QSystemTrayIcon()
-
         icon_path = os.path.join("Visuals", "icon.png")
         if os.path.exists(icon_path):
             self.tray.setIcon(QIcon(icon_path))
         else:
-            #   Backup icon in case the path breaks
             pixmap = QPixmap(64, 64)
             pixmap.fill(QColor("red"))
             self.tray.setIcon(QIcon(pixmap))
@@ -125,7 +100,6 @@ class TerrariumUI(QMainWindow):
 
         self.tray.activated.connect(self.on_tray_activated)
 
-
     def on_tray_activated(self, reason):
         if reason == QSystemTrayIcon.Trigger:
             if self.isMinimized() or not self.isVisible():
@@ -142,9 +116,13 @@ class TerrariumUI(QMainWindow):
         event.ignore()
         self.hide()
 
+def load_stylesheet(path):
+    with open(path, "r") as f:
+        return f.read()
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
+    app.setStyleSheet(load_stylesheet("style.qss"))  # Universal stylesheet
     window = TerrariumUI()
     window.show()
     sys.exit(app.exec_())

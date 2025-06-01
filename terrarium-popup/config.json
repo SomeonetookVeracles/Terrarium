@@ -1,1 +1,19 @@
-{}
+{
+    "METADATA": {
+        "NAME": "Terrarium",
+        "VERSION": "0.1.2",
+        "build": "Unstable"
+    },
+    "GLOBALS": {
+        "DEVMODE": true
+    },
+    "DISPLAY": {
+        "width_ratio": 0.3,
+        "height_ratio": 0.5,
+        "DARKMODE": false,
+        "width-ratio": 0.1
+    },
+    "GAME": {
+        "Placeholders, put all variables for the game in here": false
+    }
+}

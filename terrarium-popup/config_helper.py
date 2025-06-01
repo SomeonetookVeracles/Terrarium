@@ -40,9 +40,9 @@ def merge_dicts(defaults, custom):
         if key not in custom:
             custom[key] = defaults[key]
         elif isinstance(defaults[key], dict):
-            custom[key] = merge_dicts(defaults[key], custom/get(key, {}))
+            custom[key] = merge_dicts(defaults[key], custom.get(key, {}))
     return custom
 
 def save_config(config_data):
     with open(CONFIG_PATH, "w") as f:
-        json.dump(config_data, f, indent=2)
+        json.dump(config_data, f, indent=4)
