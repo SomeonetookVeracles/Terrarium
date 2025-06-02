@@ -1,4 +1,15 @@
 Terrarium
+//RELEASE 0.1 - PAPAYA
+
+Made a main application window using QMainWindow, QStackedLayout, and a global stylesheet using the QSS format.
+
+We also experimented with using Electron and Godot web edition to develop our app, which went so poorly we reverted to a python based approach, with a C++ backend. 
+
+As for technical improvements, we made a JSON configuration file, and to give full read/write support while using the program, we added a helper module to act as a middle man between the two.    
+    
+    
+    
+    
     Terrarium is a productivity companion that allows coders in the Hack Club base to stay on track while having a small terrarium that grows as they code. This project reminds users to drink water every 45 minutes and eat a snack every hour. It also automatically takes a screenshot of your screen every hour so you don't forget to have a picture of your project to put into Hack_Hour on Slack!
 
 Installation:
