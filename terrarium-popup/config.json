@@ -8,10 +8,9 @@
         "DEVMODE": true
     },
     "DISPLAY": {
-        "width_ratio": 0.3,
+        "width_ratio": 0.33,
         "height_ratio": 0.5,
-        "DARKMODE": false,
-        "width-ratio": 0.1
+        "DARKMODE": false
     },
     "GAME": {
         "Placeholders, put all variables for the game in here": false

@@ -116,13 +116,22 @@ class TerrariumUI(QMainWindow):
         event.ignore()
         self.hide()
 
+def resource_path(relative_path):
+    """ Get absolute path to resource, works for dev and PyInstaller """
+    try:
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+    return os.path.join(base_path, relative_path)
+
 def load_stylesheet(path):
-    with open(path, "r") as f:
+    full_path = resource_path(path)
+    with open(full_path, "r") as f:
         return f.read()
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
-    app.setStyleSheet(load_stylesheet("style.qss"))  # Universal stylesheet
+    app.setStyleSheet(load_stylesheet("style.qss"))  # Load global style
     window = TerrariumUI()
     window.show()
     sys.exit(app.exec_())
