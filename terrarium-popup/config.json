@@ -1,7 +1,7 @@
 {
     "METADATA": {
         "NAME": "Terrarium",
-        "VERSION": "0.1.2",
+        "VERSION": "0.1.4",
         "build": "Unstable"
     },
     "GLOBALS": {
@@ -10,7 +10,10 @@
     "DISPLAY": {
         "width_ratio": 0.33,
         "height_ratio": 0.5,
-        "DARKMODE": false
+        "DARKMODE": false,
+        "sidebar_width": 120,
+        "winwidth": 1167,
+        "winheight": 525
     },
     "GAME": {
         "Placeholders, put all variables for the game in here": false

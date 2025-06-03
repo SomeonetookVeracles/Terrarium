@@ -6,7 +6,8 @@ from PyQt5.QtWidgets import (
 )
 from PyQt5.QtGui import QIcon, QPixmap, QColor
 from PyQt5.QtCore import Qt, QRect
-from config_helper import load_config
+from config_helper import load_config, save_config 
+# All pages are imported here, to make the program more modular.
 from Pages.settings_page import SettingsPage
 from Pages.main_page import MainPage 
 
@@ -30,14 +31,22 @@ class TerrariumUI(QMainWindow):
         height = int(screen.height() * config["DISPLAY"]["height_ratio"])
         x = screen.width() - width
         y = screen.height() - height
-        self.setGeometry(QRect(x, y, width, height))
 
+        #Lock to bottom right
+        self.setGeometry(x, y, width, height)
         # Sidebar setup
         sidebar_widget = QWidget()
-        sidebar_widget.setFixedWidth(120)
+        sidewidth = config["DISPLAY"]["sidebar_width"]
+        sidebar_widget.setFixedWidth(sidewidth)
         sidebar_widget.setObjectName("sidebar")
         sidebar_widget.setLayout(self.sidebar_layout)
 
+        # Establish the pygame window size
+        winwidth = x - sidewidth
+        winheight = y
+        config["DISPLAY"]["winheight"] = winheight
+        config["DISPLAY"]["winwidth"] = winwidth
+        save_config(config)
         # Stacked content area
         stacked_widget = QWidget()
         stacked_widget.setLayout(self.pages)
@@ -68,7 +77,7 @@ class TerrariumUI(QMainWindow):
         self.sidebar_layout.insertWidget(index, btn)
 
     def init_tray(self):
-        self.tray = QSystemTrayIcon()
+        self.tray = QSystemTrayIcon(self)
         icon_path = os.path.join("Visuals", "icon.png")
         if os.path.exists(icon_path):
             self.tray.setIcon(QIcon(icon_path))
@@ -77,20 +86,25 @@ class TerrariumUI(QMainWindow):
             pixmap.fill(QColor("red"))
             self.tray.setIcon(QIcon(pixmap))
 
-        self.tray.setVisible(True)
-
         tray_menu = QMenu()
-        open_action = QAction("Open")
+        # region Open page
+        open_action = QAction("Open", self)
         open_action.triggered.connect(self.show_normal)
-
-        exit_action = QAction("Exit")
-        exit_action.triggered.connect(QApplication.instance().quit)
-
         tray_menu.addAction(open_action)
-        tray_menu.addAction(exit_action)
-        self.tray.setContextMenu(tray_menu)
+        # endregion
+        # region Close page
+        close_action = QAction("Close", self)
+        close_action.triggered.connect(self.hide)
+        tray_menu.addAction(close_action)
+        # endregion
+        # region Terminate process
+        term_action = QAction("Exit", self)
+        term_action.triggered.connect(lambda: QApplication.instance().quit())
+        tray_menu.addAction(term_action)
+        # endregion
 
-        self.tray.activated.connect(self.on_tray_activated)
+        self.tray.setContextMenu(tray_menu)  # <- THIS is essential
+        self.tray.setVisible(True)
 
     def on_tray_activated(self, reason):
         if reason == QSystemTrayIcon.Trigger:
@@ -107,6 +121,8 @@ class TerrariumUI(QMainWindow):
     def closeEvent(self, event):
         event.ignore()
         self.hide()
+
+
 
 def resource_path(relative_path):
     # Get absolute path
