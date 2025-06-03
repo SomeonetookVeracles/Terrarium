@@ -7,18 +7,10 @@ from PyQt5.QtWidgets import (
 from PyQt5.QtGui import QIcon, QPixmap, QColor
 from PyQt5.QtCore import Qt, QRect
 from config_helper import load_config
-from settings_page import SettingsPage
+from Pages.settings_page import SettingsPage
+from Pages.main_page import MainPage 
 
 config = load_config()
-
-class MainPage(QWidget):
-    def __init__(self):
-        super().__init__()
-        layout = QVBoxLayout()
-        label = QLabel("🌱 Welcome to Terrarium")
-        layout.addWidget(label)
-        layout.addStretch()
-        self.setLayout(layout)
 
 class TerrariumUI(QMainWindow):
     def __init__(self):
@@ -117,7 +109,7 @@ class TerrariumUI(QMainWindow):
         self.hide()
 
 def resource_path(relative_path):
-    """ Get absolute path to resource, works for dev and PyInstaller """
+    # Get absolute path
     try:
         base_path = sys._MEIPASS
     except Exception:
@@ -131,7 +123,8 @@ def load_stylesheet(path):
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
-    app.setStyleSheet(load_stylesheet("style.qss"))  # Load global style
+    # Load stylehseet from visuals folder
+    app.setStyleSheet(load_stylesheet("Visuals/style.qss"))  # Load global style
     window = TerrariumUI()
     window.show()
     sys.exit(app.exec_())
