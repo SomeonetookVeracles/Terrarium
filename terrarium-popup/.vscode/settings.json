@@ -6,7 +6,7 @@
         "**/.DS_Store": true,
         "**/Thumbs.db": true,
         "**/__pycache__": true,
-        "run.bat": false,
+        "run.bat": true,
         "setup.bat": true,
         "compile.bat": true
     },
