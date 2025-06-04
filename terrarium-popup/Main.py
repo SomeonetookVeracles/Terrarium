@@ -50,7 +50,7 @@ class TerrariumUI(QMainWindow):
         height_ratio = self.config["DISPLAY"].get("height_ratio", 0.8)
         #region Establishing Variables
         width = int(screen.width() * width_ratio)
-        height = int(screen.height() * height_ratio)
+        height = int(screen.width() * height_ratio)
         x = screen.width() - width
         y = screen.height() - height 
         #endregion
