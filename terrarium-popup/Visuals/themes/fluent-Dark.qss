@@ -1,0 +1,116 @@
+/* ==== Fluent themed dark mode ==== */
+/* Font and base styling */
+QWidget {
+    background-color: #1f1f1f;
+    color: #f3f3f3;
+    font-family: 'Segoe UI', 'Roboto', sans-serif;
+    font-size: 14px;
+}
+
+/* === Settings Page === */
+#settings-page {
+    background-color: #2b2b2b;
+    padding: 24px;
+    border-radius: 12px;
+    border: 1px solid #3a3a3a;
+}
+
+/* === Labels === */
+#settings-label {
+    font-weight: 600;
+    color: #ffffff;
+    padding: 8px 0;
+}
+
+/* === Sidebar === */
+#sidebar {
+    background-color: #1f1f1f;
+    border-right: 1px solid #333333;
+}
+
+/* === Sidebar Buttons === */
+#sidebar-button {
+    background-color: transparent;
+    color: #f3f3f3;
+    padding: 12px 16px;
+    border: none;
+    text-align: left;
+    border-radius: 6px;
+}
+#sidebar-button:hover {
+    background-color: #2a2a2a;
+}
+
+/* === Content Area === */
+#content {
+    background-color: #2b2b2b;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+/* === QPushButton === */
+QPushButton {
+    background-color: #333333;
+    color: #ffffff;
+    border: 1px solid #444444;
+    padding: 10px 16px;
+    border-radius: 6px;
+    font-weight: 500;
+}
+QPushButton:hover {
+    background-color: #3d3d3d;
+    border: 1px solid #555555;
+}
+QPushButton:pressed {
+    background-color: #4a4a4a;
+    border: 1px solid #666666;
+}
+/* === QCheckBox === */
+QCheckBox {
+    padding: 6px;
+    spacing: 6px;
+    font-weight: 400;
+}
+QCheckBox::indicator {
+    width: 18px;
+    height: 18px;
+    border-radius: 4px;
+    border: 1px solid #777777;
+    background-color: #2a2a2a;
+}
+QCheckBox::indicator:checked {
+    background-color: #0078d4;
+    /* image: url(:/icons/Darkcheckmark.svg); */
+    border: 1px solid #0078d4;
+}
+
+/* === Qslider == */
+QSlider::groove:horizontal {
+    height: 4px;
+    background: #444444;
+    border-radius: 2px;
+}
+QSlider::handle:horizontal {
+    background: #0078d4;
+    border: none;
+    height: 16px;
+    width: 16px;
+    margin: -6px 0;
+    border-radius: 8px;
+}
+
+/* === Settings Elements === */
+#settings-checkbox {
+    font-size: 14px;
+    margin-bottom: 12px;
+    color: #e0e0e0;
+}
+#settings-slider {
+    min-height: 20px;
+    border-radius: 3px;
+}
+/* Contrasting Labels */
+#settings-label {
+    font-weight: bold;
+    color: #ffffff;
+}
