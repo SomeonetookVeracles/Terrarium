@@ -2,10 +2,7 @@
     "METADATA": {
         "Name": "Terrarium",
         "Version": "0.1.4",
-        "Build": "Unstable",
-        "NAME": "Terrarium",
-        "VERSION": "0.1.2",
-        "build": "Unstable"
+        "Build": "Unstable"
     },
     "GLOBALS": {
         "DEVMODE": true
@@ -26,8 +23,7 @@
                 "name": "fluent-Light",
                 "content": "/* Lightmode fluent style */\n\n/*font and base styling */\nQWidget {\n    background-color: #f3f3f3; /* Light background color, like fluent mica*/\n    color: #1f1f1f;\n    font-family: 'Segoe UI', 'Roboto', sans-serif;\n    font-size: 14px;\n}\n/* === Settings === */\n#settings-page {\n    background-color: #ffffff;\n    padding: 24px;\n    border-radius: 12px;\n    border: 1px solid #d0d0d0;\n}\n/* === Labels === */\n#settings-label {\n    font-weight: 600;\n    color: #1f1f1f;\n    padding: 8px 0,\n}\n\n/* ==== Sidebar ==== */\n#sidebar {\n    background-color: #e6e6e6;\n    border-right: 1px solid #cccccc\n}\n/* === Sidebar Buttons === */\n#sidebar-button {\n    background-color: transparent;\n    color: #1f1f1f;\n    padding: 12px 16px;\n    border: none;\n    text-align: left;\n    border-radius: 6px;\n}\n\n#sidebar-button:hover {\n    background-color: #e0e0e0;\n}\n/* === Content Area === */\n#content {\n    background-color: #ffffff;\n    padding: 20px;\n    border-radius: 8px;\n}\n/* === General Styling for QPushButton === */\nQPushButton {\n    background-color: #e1e1e1;\n    color: #1f1f1f;\n    border: 1px solid #cfcfcf;\n    padding: 10px 16px;\n    border-radius: 6px;\n    font-weight: 500;\n}\n\nQPushButton:hover {\n    background-color: #d0d0d0;\n    border: 1px solid #b0b0b0;\n}\nQPushButton:pressed {\n    background-color: #c0c0c0;\n    border: 1px solid #a0a0a0;\n}\n/* === Checkbox Styling === */\nQCheckBox {\n    padding: 6px;\n    spacing: 6px;\n    font-weight: 400;\n}\nQCheckBox::indicator {\n    width: 18px;\n    height: 18px;\n    border-radius: 4px;\n    border: 1px solid #a0a0a0;\n    background-color: #ffffff;\n}\nQCheckBox::indicator:checked {\n    background-color: #0078d4; /*Fluent Blue */\n    /* image: url(:/icons/checkmark.svg); */\n    border: 1px solid #0078d4;\n}\n/* === Sliders === */\nQSlider::groove:horizontal {\n    height: 4px;\n    background: #d0d0d0;\n    border-radius: 2px;\n}\n\nQSlider::handle:horizontal {\n    background: #0078d4;\n    border: none;\n    height: 16px;\n    width: 16px;\n    margin: -6px 0;\n    border-radius: 8px;\n}\n/* === Specific Settings Elements === */\n#settings-checkbox {\n    font-size: 14px;\n    margin-bottom: 12px;\n}\n#settings-slider {\n    min-height: 20px;\n    border-radius: 3px;\n}\n/* Ensure label contrast */\n#settings-label {\n    font-weight: bold;\n    color: #1f1f1f;\n}"
             }
-        ],
-        "DARKMODE": false
+        ]
     },
     "GAME": {
         "Placeholders, put all variables for the game in here": false
