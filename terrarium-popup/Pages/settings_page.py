@@ -1,10 +1,9 @@
 from PyQt5.QtWidgets import (
-    QWidget, QLabel, QSlider, QFormLayout, QComboBox
+    QWidget, QLabel, QSlider, QFormLayout, QComboBox, QApplication
 )
 from PyQt5.QtCore import Qt
 from config_helper import load_config, save_config
-
-
+from Services.theme_loader import load_current_theme_stylesheet
 class SettingsPage(QWidget):
     def __init__(self):
         super().__init__()
@@ -74,4 +73,8 @@ class SettingsPage(QWidget):
     def update_theme(self, theme_name):
         self.config["DISPLAY"]["current_theme"] = theme_name
         save_config(self.config)
-        print(f"Theme changed to: {theme_name}")
+
+        # force update theme 
+        app = QApplication.instance()
+        app.setStyleSheet(load_current_theme_stylesheet())
+        print(f"Rheme changed to {theme_name}")

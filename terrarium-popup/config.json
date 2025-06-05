@@ -1,7 +1,10 @@
 {
     "METADATA": {
+        "Name": "Terrarium",
+        "Version": "0.1.4",
+        "Build": "Unstable",
         "NAME": "Terrarium",
-        "VERSION": "0.1.4",
+        "VERSION": "0.1.2",
         "build": "Unstable"
     },
     "GLOBALS": {
