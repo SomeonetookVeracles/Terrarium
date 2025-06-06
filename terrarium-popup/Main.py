@@ -2,8 +2,8 @@ import sys
 import os
 from PyQt5.QtWidgets import (
     QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout,
-    QPushButton, QLabel, QStackedLayout, QStackedWidget,
-    QSystemTrayIcon, QMenu, QAction
+    QPushButton, QStackedWidget,
+    QSystemTrayIcon, QMenu, QAction, QGraphicsDropShadowEffect
 )
 from PyQt5.QtGui import QIcon, QPixmap, QColor
 from PyQt5.QtCore import Qt, QRect
@@ -29,6 +29,7 @@ class TerrariumUI(QMainWindow):
         self.setWindowTitle("Terrarium")
         self.setWindowFlags(Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint)
 
+
         # Geometry based on DISPLAY config
         screen = QApplication.primaryScreen().availableGeometry()
         config = load_config()
@@ -38,7 +39,6 @@ class TerrariumUI(QMainWindow):
         y = screen.height() - height
 
         self.setGeometry(x, y, width, height)
-
         # Sidebar setup
         sidebar_widget = QWidget()
         self.sidebar_layout.setAlignment(Qt.AlignTop)
@@ -70,8 +70,24 @@ class TerrariumUI(QMainWindow):
 
         container = QWidget()
         container.setLayout(main_layout)
-        self.setCentralWidget(container)
 
+        # Drop Shadow effect applied to container
+        shadow = QGraphicsDropShadowEffect(self)
+        shadow.setBlurRadius(20)
+        shadow.setOffset(0, 0)
+        shadow.setColor(QColor(0, 0, 0, 180))
+        container.setGraphicsEffect(shadow)
+
+        #Give the shadow margin space, required because of the lack of borders from framelessness
+        shadow_wrapper = QWidget()
+        wrapper_layout = QVBoxLayout()
+        wrapper_layout.setContentsMargins(20, 20, 20, 20) # Makes room for shadows, don't adjust
+        wrapper_layout.addWidget(container)
+        shadow_wrapper.setLayout(wrapper_layout)
+
+        self.setCentralWidget(shadow_wrapper)
+
+        self.setCentralWidget(container)
         # Debug flagging
         print("Pages count:", self.pages.count())
         print("Window geometry:", self.geometry())
@@ -97,6 +113,7 @@ class TerrariumUI(QMainWindow):
             pixmap.fill(QColor("red"))
             self.tray.setIcon(QIcon(pixmap))
         self.tray.activated.connect(self.on_tray_activated)
+        self.tray.setToolTip("Terrarium")
 
 
         tray_menu = QMenu()
