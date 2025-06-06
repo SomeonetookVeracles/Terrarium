@@ -96,6 +96,8 @@ class TerrariumUI(QMainWindow):
             pixmap = QPixmap(64, 64)
             pixmap.fill(QColor("red"))
             self.tray.setIcon(QIcon(pixmap))
+        self.tray.activated.connect(self.on_tray_activated)
+
 
         tray_menu = QMenu()
 
