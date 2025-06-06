@@ -1,41 +1,33 @@
-Terrarium
-//RELEASE 0.1 - PAPAYA
+# 🌱 Terrarium
+A tamagochi inspired desktop and mobile app made using PyQt5 and REACT.js, to keep you motivated to continue programming and developing!
 
-Made a main application window using QMainWindow, QStackedLayout, and a global stylesheet using the QSS format.
+Made for **Hack Club: Neighborhood** 
 
-We also experimented with using Electron and Godot web edition to develop our app, which went so poorly we reverted to a python based approach, with a C++ backend. 
+By Ari Inlong and Owen Borgos
 
-As for technical improvements, we made a JSON configuration file, and to give full read/write support while using the program, we added a helper module to act as a middle man between the two.    
-    
-    
-    
-    
-    Terrarium is a productivity companion that allows coders in the Hack Club base to stay on track while having a small terrarium that grows as they code. This project reminds users to drink water every 45 minutes and eat a snack every hour. It also automatically takes a screenshot of your screen every hour so you don't forget to have a picture of your project to put into Hack_Hour on Slack!
+---
 
-Installation:
-Because compiling stuff is boring and we're constantly pushing incremental updates, you will have to install electron, node.js, and a few other dependencies in the terrarium-popup folder, the batch file is currently broken
+## 📃 Features
 
-Modifications:
-You can modify the intervals and screenshot behavior in config.json
-    You can copy the json code to input into your own config.json
-{
-    "water_interval_minutes": 45,
-    "snack_interval_minutes": 60,
-    "screenshot_interval_minutes": 60,
-    "screenshot_folder": "./screenshots"
-}
-All screenshots are saved in the "screenshots" folder by default.
+- Make it your own!
+    - Each Tamagochi can be customized from one of 3 archetypes:
+        - Parakeet 🐦 (Not currently implemented)
+        - Cat 🐈 (Not currently implemented)
+        - Pet Rock 🌚
+    - Or you can add your own! (Not currently implemented)
+- Sharing is Caring
+    - By integrating the slack api, you will be able to share your pet with another person, adding it to their collection! (Not currently implemented)
+    - Collect enough pets, and you can even unlock a surprise!
+- Achievements
+    - To celebrate the hard work every hack clubber did to make it to neighborhood, achievements will be added, allowing members of neighborhood to add custom tags and more to their slack!
+ 
+  ## ❔ Demo
 
-Dependencies
-plyer - for cross-platform notifications
-pyautogui - for screenshots
-datetime and os - time and file management.
-    To install these dependencies:
-    pip install -r requirements.txt
+  To be implemented later
 
-License:
-    Licensed under the Apache License 2.0
-
-Authors:
-    SomeonetookVeracles & CitrusB1. 
-                                                    Happy Hacking!
+  ## Technology
+|Tech  |Description                           |
+|---------|-----------                        |   
+|'Python-3| Main Language                     |
+|'PyQt5'  | UI toolkit for GUI and widget     |
+|'React.js| UI kit for mobile versions        |
