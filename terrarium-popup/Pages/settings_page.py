@@ -3,7 +3,7 @@ from PyQt5.QtWidgets import (
     QPushButton, QVBoxLayout, QScrollArea, QHBoxLayout, QApplication
 )
 from PyQt5.QtCore import Qt
-from config_helper import load_config, save_config, get_default_config
+from config_helper import load_config, save_config, get_default_config, debug_log
 import json #! Keep this
 
 class SettingsPage(QWidget):

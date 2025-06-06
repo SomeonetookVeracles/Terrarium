@@ -5,7 +5,7 @@ from PyQt5.QtWidgets import (
 from PyQt5.QtGui import QPixmap, QColor
 from PyQt5.QtCore import Qt
 import os
-from config_helper import load_config, save_config
+from config_helper import load_config, save_config, debug_log
 #TODO: From PIL import Image #More advanced image editing (Low priority)
 
 class PetPage(QWidget):
@@ -52,24 +52,23 @@ class PetPage(QWidget):
         #* - P2, Appearance customization
         appearance = QWidget()
         layout2 = QVBoxLayout()
+        layout2.addStretch()
         appearance.setLayout(layout2)
-
+        row_layout = QVBoxLayout()
+        #Base Color Picker #TODO: Make the color picker a part of the menu, instead of a popup (Low Priority)
         self.color_picker_btn = QPushButton("Pick Base Color")
         self.color_picker_btn.clicked.connect(self.pick_color)
-        layout2.addWidget(self.color_picker_btn)
+        row_layout.addWidget(self.color_picker_btn)
 
+        #Pattern Selector
         self.pattern_dropdown = QComboBox()
-        self.pattern_dropdown.addItem("None") #TODO: Implement Pattern system. (Medium Priority)
-        #TODO: Dynamically load patterns from file. (Medium Priority)
+        self.pattern_dropdown.addItem("None") #TODO: Make the patterns update in live time.
         for fname in os.listdir("Visuals/patterns"):
-            if fname.lower().endswith((".png", ".jpg")):
-                self.pattern_dropdown.addItem(fname)
-        layout2.addWidget(QLabel("Choose Pattern:"))
-        layout2.addWidget(self.pattern_dropdown)
+            if fname.lower().endswith((".png", ".jpg", ".jpeg")):
+                self.pattern_dropdown.addIten(fname)
+        row_layout.addWidget(self.pattern_dropdown)
 
-        next_btn2 = QPushButton("Next") #TODO: Implement selection check (Medium Priority)
-        next_btn2.clicked.connect(self.go_to_naming_page)
-        layout2.addWidget(next_btn2)
+        layout2.addLayout(row_layout) #TODO: Implement selection check (Medium Priority)
 
         #* - P3, Name and Personality
         name_screen = QWidget()

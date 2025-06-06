@@ -3,7 +3,7 @@ import pygame
 from PyQt5.QtCore import QTimer, Qt
 from PyQt5.QtGui import QImage, QPainter
 from PyQt5.QtWidgets import QWidget, QVBoxLayout
-from config_helper import load_config
+from config_helper import load_config, debug_log
 
 config = load_config()
 

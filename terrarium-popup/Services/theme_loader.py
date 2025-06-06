@@ -1,5 +1,5 @@
 import os
-from config_helper import load_config
+from config_helper import load_config, debug_log
 
 def resource_path(relative_path):
     try:

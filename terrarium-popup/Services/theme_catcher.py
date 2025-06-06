@@ -1,6 +1,6 @@
 import os
 import sys
-from config_helper import load_config, save_config
+from config_helper import load_config, save_config, debug_log
 
 def resource_path(relative_path):
     """ Get absolute path to resource, compatible with PyInstaller """

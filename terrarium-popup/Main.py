@@ -9,15 +9,13 @@ from PyQt5.QtGui import QIcon, QPixmap, QColor
 from PyQt5.QtCore import Qt, QRect
 
 from Services.theme_catcher import update_theme_list
-from config_helper import load_config, save_config
+from config_helper import load_config, save_config, debug_log
 from Services.theme_loader import load_current_theme_stylesheet
 
 # All pages
 from Pages.pet_page import PetPage
 from Pages.settings_page import SettingsPage
 from Pages.main_page import MainPage
-
-
 
 class TerrariumUI(QMainWindow):
     def __init__(self):
@@ -61,8 +59,8 @@ class TerrariumUI(QMainWindow):
 
         # Add pages
         self.add_page("Main", MainPage)
-        self.add_page("Settings", SettingsPage)
         self.add_page("Status", PetPage)
+        self.add_page("Settings", SettingsPage)
         self.pages.setCurrentIndex(0)  # Set initial page
 
         # Combine into main layout
@@ -91,10 +89,13 @@ class TerrariumUI(QMainWindow):
 
     def init_tray(self):
         self.tray = QSystemTrayIcon(self)
-
-        pixmap = QPixmap(64, 64)
-        pixmap.fill(QColor("red"))
-        self.tray.setIcon(QIcon(pixmap))
+        icon_path = os.path.join("Visuals", "trayIcon64.png") # Establish icon path
+        if os.path.exists(icon_path): #Fallback catcher, if it can't find the icon it just makes one
+            self.tray.setIcon(QIcon(icon_path))
+        else:
+            pixmap = QPixmap(64, 64)
+            pixmap.fill(QColor("red"))
+            self.tray.setIcon(QIcon(pixmap))
 
         tray_menu = QMenu()
 
@@ -115,20 +116,21 @@ class TerrariumUI(QMainWindow):
 
     def on_tray_activated(self, reason):
         if reason == QSystemTrayIcon.Trigger:
-            if self.isMinimized() or not self.isVisible():
-                self.show_normal()
-            else:
+            if self.isVisible():
                 self.hide()
-
+                debug_log("Window Hidden")
+            else:
+                self.show_normal()
+                debug_log("Window Opened")
     def show_normal(self):
         self.show()
         self.raise_()
         self.activateWindow()
-
+        debug_log("Window Opened")
     def closeEvent(self, event):
         event.ignore()
         self.hide()
-
+        debug_log("Window Closed")
 
 if __name__ == "__main__":
     # Update themes at startup
