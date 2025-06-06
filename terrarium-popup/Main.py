@@ -13,6 +13,7 @@ from config_helper import load_config, save_config
 from Services.theme_loader import load_current_theme_stylesheet
 
 # All pages
+from Pages.pet_page import PetPage
 from Pages.settings_page import SettingsPage
 from Pages.main_page import MainPage
 
@@ -42,6 +43,9 @@ class TerrariumUI(QMainWindow):
 
         # Sidebar setup
         sidebar_widget = QWidget()
+        self.sidebar_layout.setAlignment(Qt.AlignTop)
+        self.sidebar_layout.setContentsMargins(8, 8, 8, 8)
+        self.sidebar_layout.setSpacing(10)
         sidewidth = config["DISPLAY"].get("sidebar_width", 120)
         sidebar_widget.setFixedWidth(sidewidth)
         sidebar_widget.setObjectName("sidebar")
@@ -58,12 +62,13 @@ class TerrariumUI(QMainWindow):
         # Add pages
         self.add_page("Main", MainPage)
         self.add_page("Settings", SettingsPage)
+        self.add_page("Status", PetPage)
         self.pages.setCurrentIndex(0)  # Set initial page
 
         # Combine into main layout
         main_layout = QHBoxLayout()
         main_layout.addWidget(sidebar_widget)
-        main_layout.addWidget(self.pages)  # ✅ Add stacked widget directly
+        main_layout.addWidget(self.pages)
 
         container = QWidget()
         container.setLayout(main_layout)
@@ -76,7 +81,7 @@ class TerrariumUI(QMainWindow):
     def add_page(self, name, widget_class):
         page = widget_class()
         index = self.pages.count()
-        self.pages.addWidget(page)  # ✅ QStackedWidget method
+        self.pages.addWidget(page) 
 
         btn = QPushButton(name)
         btn.setCursor(Qt.PointingHandCursor)
@@ -86,13 +91,10 @@ class TerrariumUI(QMainWindow):
 
     def init_tray(self):
         self.tray = QSystemTrayIcon(self)
-        icon_path = os.path.join("Visuals", "icon.png")
-        if os.path.exists(icon_path):
-            self.tray.setIcon(QIcon(icon_path))
-        else:
-            pixmap = QPixmap(64, 64)
-            pixmap.fill(QColor("red"))
-            self.tray.setIcon(QIcon(pixmap))
+
+        pixmap = QPixmap(64, 64)
+        pixmap.fill(QColor("red"))
+        self.tray.setIcon(QIcon(pixmap))
 
         tray_menu = QMenu()
 

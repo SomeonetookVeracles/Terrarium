@@ -1,5 +1,7 @@
-/* ==== Fluent themed dark mode ==== */
-/* Font and base styling */
+/* ==== Fluent-Themed Dark Mode ==== */
+
+/* === Global Styling === */
+
 QWidget {
     background-color: #1f1f1f;
     color: #f3f3f3;
@@ -7,7 +9,7 @@ QWidget {
     font-size: 14px;
 }
 
-/* === Settings Page === */
+/* === Settings Page Container === */
 #settings-page {
     background-color: #2b2b2b;
     padding: 24px;
@@ -16,10 +18,16 @@ QWidget {
 }
 
 /* === Labels === */
-#settings-label {
-    font-weight: 600;
+QLabel {
     color: #ffffff;
-    padding: 8px 0;
+    font-weight: 600;
+    padding: 4px 0;
+}
+
+#settings-label {
+    color: #ffffff;
+    font-weight: bold;
+    padding: 4px 0;
 }
 
 /* === Sidebar === */
@@ -37,6 +45,7 @@ QWidget {
     text-align: left;
     border-radius: 6px;
 }
+
 #sidebar-button:hover {
     background-color: #2a2a2a;
 }
@@ -48,29 +57,34 @@ QWidget {
     border-radius: 8px;
 }
 
-/* === QPushButton === */
+/* === Buttons === */
 QPushButton {
     background-color: #333333;
-    color: #ffffff;
+    color: #f3f3f3;
     border: 1px solid #444444;
-    padding: 10px 16px;
     border-radius: 6px;
+    padding: 8px 14px;
     font-weight: 500;
 }
+
 QPushButton:hover {
     background-color: #3d3d3d;
     border: 1px solid #555555;
 }
+
 QPushButton:pressed {
     background-color: #4a4a4a;
     border: 1px solid #666666;
 }
-/* === QCheckBox === */
+
+/* === Checkboxes === */
 QCheckBox {
     padding: 6px;
     spacing: 6px;
+    color: #f3f3f3;
     font-weight: 400;
 }
+
 QCheckBox::indicator {
     width: 18px;
     height: 18px;
@@ -78,18 +92,61 @@ QCheckBox::indicator {
     border: 1px solid #777777;
     background-color: #2a2a2a;
 }
+
 QCheckBox::indicator:checked {
     background-color: #0078d4;
-    /* image: url(:/icons/Darkcheckmark.svg); */
     border: 1px solid #0078d4;
+    /* Optionally add a checkmark image here */
 }
 
-/* === Qslider == */
+/* === Text Inputs === */
+QLineEdit {
+    background-color: #2a2a2a;
+    border: 1px solid #444444;
+    color: #f3f3f3;
+    padding: 6px;
+    border-radius: 4px;
+}
+
+/* === Dropdowns === */
+QComboBox {
+    background-color: #2a2a2a;
+    border: 1px solid #444444;
+    color: #f3f3f3;
+    padding: 6px;
+    border-radius: 4px;
+}
+
+QComboBox QAbstractItemView {
+    background-color: #1f1f1f;
+    border: 1px solid #333333;
+    selection-background-color: #0078d4;
+    color: #f3f3f3;
+}
+
+/* === Scrollbars === */
+QScrollBar:vertical {
+    background: #1f1f1f;
+    width: 12px;
+}
+
+QScrollBar::handle:vertical {
+    background: #0078d4;
+    border-radius: 6px;
+}
+
+QScrollBar::add-line:vertical,
+QScrollBar::sub-line:vertical {
+    height: 0;
+}
+
+/* === Sliders === */
 QSlider::groove:horizontal {
     height: 4px;
     background: #444444;
     border-radius: 2px;
 }
+
 QSlider::handle:horizontal {
     background: #0078d4;
     border: none;
@@ -99,18 +156,14 @@ QSlider::handle:horizontal {
     border-radius: 8px;
 }
 
-/* === Settings Elements === */
+/* === Settings Element IDs === */
 #settings-checkbox {
     font-size: 14px;
     margin-bottom: 12px;
     color: #e0e0e0;
 }
+
 #settings-slider {
     min-height: 20px;
     border-radius: 3px;
-}
-/* Contrasting Labels */
-#settings-label {
-    font-weight: bold;
-    color: #ffffff;
 }

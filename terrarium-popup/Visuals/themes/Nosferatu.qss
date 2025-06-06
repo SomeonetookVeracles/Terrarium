@@ -1,0 +1,106 @@
+/* == Inspired by Dracula for VSC == */
+/* All credits go to original authors https://draculatheme.com/visual-studio-code */
+
+#pygame-surface {
+    background-color: transparent;
+    border: none;
+}
+QWidget {
+    background-color: #282A36;
+    color: #F8F8F2;
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 14px;
+}
+
+QLabel {
+    color: #F1FA8C;
+
+}
+QCheckBox {
+    padding: 6px;
+    color: #F8F8F2;
+}
+QCheckBox::indicator {
+    width: 16px;
+    height: 16px;
+    border-radius: 4px;
+}
+QCheckBox::indicator:checked {
+    background-color: #50FA7B;
+    border: 1px solid #50FA7B;
+}
+
+QCheckBox::indicator:unchecked {
+    background-color: #6272A4;
+    border: 1px solid #6272A4;
+}
+/* Button styling */
+QPushButton {
+    background-color: #6272A4;
+    color: #F8F8F2;
+    border-radius: 6px;
+    padding: 8px 12px;
+    font-weight: bold;
+    border: 1px solid #44475A;
+}
+
+QPushButton:hover {
+    background-color: #BD93F9;
+    border: 1px solid #BD93F9;
+}
+QPushButton:pressed {
+    background-color: #FF79C6;
+    border: 1px solid #FF79C6;
+    color: #282A36;
+}
+/* Input Fields */
+QLineEdit {
+    background-color: #44475A;
+    border: 1px solid #6272A4;
+    color: #F8F8F2;
+    padding: 6px;
+    border-radius: 4px;
+}
+QComboBox {
+    background-color: #44475A;
+    border: 1px solid #6272A4;
+    padding: 6px;
+    color: #F8F8F2;
+    border-radius: 4px;
+}
+QComboBox QAbstractItemView {
+    background-color: #282A36;
+    border: 1px solid #6272A4;
+    selection-background-color: #BD93F9;
+    color: #F8F8F2;
+}
+/* Scrollbar */
+QScrollBar: vertical {
+    background: #282A36;
+    width: 12px;
+}
+QScrollBar::handle:vertical {
+    background: #BD93F9;
+    border-radius: 6px;
+}
+QScrollBar::add-line:vertical,
+QScrollBar::sub-line:vertical {
+    border: none;
+    height: 0px;
+}
+
+/* Slider */
+QSlider::groove:horizontal {
+    height: 6px;
+    background: #6272a4;
+    border-radius: 6px;
+}
+
+QSlider::handle:horizontal {
+    background: #FFB86C;
+    border: none;
+    height: 14px;
+    width: 14px;
+    margin: -5px 0;
+    border-radius: 7px;
+}

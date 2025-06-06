@@ -44,7 +44,12 @@ class SettingsPage(QWidget):
         scroll_layout = QFormLayout()
         scroll_layout.setSpacing(12)
         #* - Helper method to apply themes
-        
+        #* - API Key Input
+        self.api_key_input = QLineEdit()
+        self.api_key_input.setEchoMode(QLineEdit.Password)
+        self.api_key_input.setPlaceholderText("Enter Hackatime Api Key")
+        self.api_key_input.setText(self.config["GLOBALS"].get("WAKA_API_KEY", ""))
+        scroll_layout.addRow(QLabel("Hackatime API Key"), self.api_key_input)
         #* - Width Ratio Input
         #TODO - Add guardrails so you can't put in absurd sizes
         self.width_input = QLineEdit(str(int(self.config["DISPLAY"].get("width_ratio", 0.5) * 100)))
@@ -133,7 +138,9 @@ class SettingsPage(QWidget):
             print(f" - Height: {self.config['DISPLAY'].get('height_ratio', 0)}")
             print(f" - Theme:  {self.config['DISPLAY'].get('current_theme', '')}")
             print(f" - DevMode: {self.config['GLOBALS'].get('DEVMODE', False)}")
+            print(f" - api.key_input: {self.config["GLOBALS"].get('WAKA_API_KEY', '')}")
         self.config["DISPLAY"]["current_theme"] = self.theme_dropdown.currentText()
+        self.config["GLOBALS"]["WAKA_API_KEY"] = self.api_key_input.text().strip()
         self.apply_theme_immediately()
     #* - Logic for reset button
     def reset_changes(self):
@@ -146,7 +153,8 @@ class SettingsPage(QWidget):
         #Reset UI fields
         self.width_input.setText(str(int(display["width_ratio"] * 100)))
         self.height_input.setText(str(int(display["height_ratio"] * 100)))
-        index = self.theme_dropdown.setCurrentIndex(display["current_theme"])
+        theme_name = display["current_theme"]
+        index = self.theme_dropdown.findText(theme_name)
         if index >= 0:
             self.theme_dropdown.setCurrentIndex(index)
         self.debug_checkbox.setChecked(globals_["DEVMODE"])
