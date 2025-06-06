@@ -1,12 +1,12 @@
 import sys
+import itertools
 import os
 from PyQt5.QtWidgets import (
     QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout,
-    QPushButton, QStackedWidget,
-    QSystemTrayIcon, QMenu, QAction, QGraphicsDropShadowEffect
+    QPushButton, QStackedWidget, QSystemTrayIcon, QMenu, QAction, QGraphicsDropShadowEffect
 )
 from PyQt5.QtGui import QIcon, QPixmap, QColor
-from PyQt5.QtCore import Qt, QRect
+from PyQt5.QtCore import Qt, QTimer
 
 from Services.theme_catcher import update_theme_list
 from config_helper import load_config, save_config, debug_log
