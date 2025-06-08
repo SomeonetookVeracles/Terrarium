@@ -58,7 +58,6 @@ def debug_log(*args, **kwargs):
     config = load_config()
     if config.get("GLOBALS", {}).get("DEVMODE", False):
         print("[DEBUG]", *args, **kwargs)
-
 def save_config(config_data):
     #Attempt to save, if failed, preserve existing data
     try:

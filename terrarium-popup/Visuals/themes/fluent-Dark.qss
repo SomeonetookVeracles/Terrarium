@@ -11,7 +11,7 @@ QWidget {
 
 /* === Settings Page Container === */
 #settings-page {
-    background-color: #2b2b2b;
+    background-color: #2b2b2b; 
     padding: 24px;
     border-radius: 12px;
     border: 1px solid #3a3a3a;
