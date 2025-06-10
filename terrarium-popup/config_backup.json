@@ -31,12 +31,7 @@
         "current_theme": "fluent-Dark"
     },
     "GAME": {
-        "active-pet": {
-            "type": "Pet Rock",
-            "base_color": "#ffffff",
-            "pattern": "hat.png",
-            "Name": "e",
-            "persona": "Cheerful"
+
         },
         "pettypes": [
             {

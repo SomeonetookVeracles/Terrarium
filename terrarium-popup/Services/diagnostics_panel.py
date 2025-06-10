@@ -21,3 +21,4 @@ class DiagnosticsPanel(QDialog):
 
     def load_log(self):
         self.log_area.setPlainText(get_log())
+   
