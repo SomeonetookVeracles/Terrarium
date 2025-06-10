@@ -194,7 +194,7 @@ class SettingsPage(QWidget):
                 info.setModal(True)
                 info.exec_()
 
-                self.petReset.emit()  # 🔁 Trigger signal to reload pet page
+                self.petReset.emit()  # reload pet page
         else:
             info = QMessageBox(self)
             info.setWindowTitle("No Pet")

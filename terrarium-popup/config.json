@@ -62,13 +62,6 @@
             {
                 "name": "Rock"
             }
-        ],
-        "active-pet": {
-            "type": "Slime",
-            "base_color": "#ffffff",
-            "pattern": null,
-            "Name": "Preview",
-            "persona": "N/A"
-        }
+        ]
     }
 }

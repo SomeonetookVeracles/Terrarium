@@ -20,7 +20,7 @@ from Pages.main_page import MainPage
 class TerrariumUI(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.pages = QStackedWidget()  # ✅ Replaced QStackedLayout with QStackedWidget
+        self.pages = QStackedWidget()
         self.sidebar_layout = QVBoxLayout()
         self.init_ui()
         self.init_tray()
@@ -28,18 +28,13 @@ class TerrariumUI(QMainWindow):
     def init_ui(self):
         self.setWindowTitle("Terrarium")
         self.setWindowFlags(Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint)
-
-
-        # Geometry based on DISPLAY config
         screen = QApplication.primaryScreen().availableGeometry()
         config = load_config()
         width = int(screen.width() * config["DISPLAY"].get("width_ratio", 0.8))
         height = int(screen.height() * config["DISPLAY"].get("height_ratio", 0.8))
         x = screen.width() - width
         y = screen.height() - height
-
         self.setGeometry(x, y, width, height)
-        # Sidebar setup
         sidebar_widget = QWidget()
         self.sidebar_layout.setAlignment(Qt.AlignTop)
         self.sidebar_layout.setContentsMargins(8, 8, 8, 8)
@@ -49,35 +44,25 @@ class TerrariumUI(QMainWindow):
         sidebar_widget.setObjectName("sidebar")
         sidebar_widget.setLayout(self.sidebar_layout)
 
-        # Save win size for embedded PygameWidget
         config["DISPLAY"]["winheight"] = height
         config["DISPLAY"]["winwidth"] = width - sidewidth
         save_config(config)
-
-        # ✅ Use QStackedWidget for content
         self.pages.setObjectName("content")
-
-        # Add pages
         self.add_page("Main", MainPage)
         self.add_page("Status", PetPage)
         self.add_page("Settings", SettingsPage)
-        self.pages.setCurrentIndex(0)  # Set initial page
-
-        # Combine into main layout
+        self.pages.setCurrentIndex(0) 
         main_layout = QHBoxLayout()
         main_layout.addWidget(sidebar_widget)
         main_layout.addWidget(self.pages)
 
         container = QWidget()
         container.setLayout(main_layout)
-
-        # Drop Shadow effect applied to container
         shadow = QGraphicsDropShadowEffect(self)
         shadow.setBlurRadius(20)
         shadow.setOffset(0, 0)
         shadow.setColor(QColor(0, 0, 0, 180))
         container.setGraphicsEffect(shadow)
-
         #Give the shadow margin space, required because of the lack of borders from framelessness
         shadow_wrapper = QWidget()
         wrapper_layout = QVBoxLayout()

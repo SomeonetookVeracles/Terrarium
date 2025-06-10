@@ -34,7 +34,6 @@ class PetPage(QWidget):
             self.init_pet_status(pet_data)
 
     def init_pet_status(self, pet_data):
-        """Show existing pet details and animation preview."""
         status_screen = QWidget()
         layout = QVBoxLayout()
         status_screen.setLayout(layout)
@@ -59,7 +58,6 @@ class PetPage(QWidget):
         self.stack.setCurrentIndex(0)
 
     def init_pet_creator(self):
-        """Wizard for pet creation: type -> appearance -> naming."""
         # Page 1: Select type
         type_select = QWidget()
         layout1 = QVBoxLayout()
@@ -146,7 +144,6 @@ class PetPage(QWidget):
         self.stack.setCurrentIndex(2)
 
     def finish_creation(self):
-        """Save pet data without addons, generate sprite from config, show preview."""
         pet_data = {
             "type": self.pet_type,
             "base_color": self.base_color.name(),
@@ -166,7 +163,6 @@ class PetPage(QWidget):
         self.stack.setCurrentIndex(self.stack.count() - 1)
 
     def create_pet_preview(self, pet_data):
-        """Show pet name and animated gif preview."""
         preview_widget = QWidget()
         layout = QVBoxLayout()
         preview_widget.setLayout(layout)
@@ -187,7 +183,6 @@ class PetPage(QWidget):
         return preview_widget
 
     def compose_pet_image(self, pet_data):
-        """Load currentPet.gif as QMovie for animation."""
         try:
             gif_path = os.path.join("Visuals", "currentPet.gif")
             if os.path.exists(gif_path):
@@ -199,7 +194,6 @@ class PetPage(QWidget):
             return None
 
     def update_pattern_list(self):
-        """Populate pattern dropdown from the pet type's patterns folder."""
         self.pattern_dropdown.clear()
         self.pattern_dropdown.addItem("None")
 
@@ -231,7 +225,6 @@ class PetPage(QWidget):
             debug_log("Error reading pattern directory:", str(e))
 
     def render_pet_preview(self):
-        """Update preview with the current pet configuration."""
         pet_data = {
             "type": self.type_dropdown.currentText(),
             "base_color": self.base_color.name(),
