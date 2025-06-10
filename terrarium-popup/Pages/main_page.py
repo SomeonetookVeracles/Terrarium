@@ -1,23 +1,26 @@
+# test_widget.py
 import sys
 import pygame
 from PyQt5.QtCore import QTimer, Qt
 from PyQt5.QtGui import QImage, QPainter
 from PyQt5.QtWidgets import (
     QWidget, QVBoxLayout, QHBoxLayout, QProgressBar,
-    QLabel, QApplication, QStackedLayout
+    QLabel, QApplication
 )
 from config_helper import load_config, debug_log
-
-config = load_config()
+from Services.data_catcher import get_metric_names, get_metric_values, deteriorate_metrics
 
 
 class testWidget(QWidget):
-    def __init__(self, width=400, height=300):  #! DONT CHANGE THIS
+    def __init__(self, width=400, height=300):
         super().__init__()
         pygame.display.init()
 
         self.surface = pygame.Surface((width, height))
         self.ant_pos = [width // 2, height // 2]
+
+        self.metric_names = get_metric_names()
+        self.metrics_config = get_metric_values()
 
         self.bars = []
         self.labels = []
@@ -30,22 +33,27 @@ class testWidget(QWidget):
 
         self.update_timer = QTimer()
         self.update_timer.timeout.connect(self.update_bars)
-        self.update_timer.start(100)
+        self.update_timer.start(1000)
+
+        self.refresh_timer = QTimer()
+        self.refresh_timer.timeout.connect(self.refresh_metrics_config)
+        self.refresh_timer.start(15000)
+
+        self.decay_timer = QTimer()
+        self.decay_timer.timeout.connect(self.apply_decay)
+        self.decay_timer.start(15000)
 
     def setup_overlay_ui(self):
         self.overlay_container = QWidget(self)
         self.overlay_container.setAttribute(Qt.WA_TransparentForMouseEvents)
         self.overlay_container.setStyleSheet("background: transparent;")
 
-        self.bars = []
-        self.labels = []
-
         layout = QHBoxLayout(self.overlay_container)
         layout.setContentsMargins(10, 0, 10, 10)
         layout.setSpacing(15)
 
-        for i in range(3):
-            title_label = QLabel(f"Metric {i+1}")
+        for name in self.metric_names:
+            title_label = QLabel(name)
             title_label.setStyleSheet("""
                 QLabel {
                     font-size: 11px;
@@ -89,14 +97,11 @@ class testWidget(QWidget):
             self.bars.append(bar)
             self.labels.append(title_label)
 
-
-
     def resizeEvent(self, event):
         self.surface = pygame.Surface((self.width(), self.height()))
         if hasattr(self, 'overlay_container'):
             self.overlay_container.setGeometry(0, self.height() - 60, self.width(), 50)
         super().resizeEvent(event)
-
 
     def update_frame(self):
         if self.surface.get_width() == 0 or self.surface.get_height() == 0:
@@ -110,12 +115,17 @@ class testWidget(QWidget):
         self.update()
 
     def update_bars(self):
-        import random
-        for bar, label in zip(self.bars, self.labels):
-            val = (bar.value() + random.randint(3, 10)) % 101
-            bar.setValue(val)
-            label.setText(f"{label.text().split(':')[0]}: {val}%")
+        for i, name in enumerate(self.metric_names):
+            value = self.metrics_config.get(name, 0)
+            self.bars[i].setValue(max(0, min(value, 100)))
+            self.labels[i].setText(f"{name}: {value}%")
 
+    def refresh_metrics_config(self):
+        self.metrics_config = get_metric_values()
+
+    def apply_decay(self):
+        deteriorate_metrics()
+        self.refresh_metrics_config()
 
     def paintEvent(self, event):
         painter = QPainter(self)
@@ -128,9 +138,9 @@ class testWidget(QWidget):
 class MainPage(QWidget):
     def __init__(self):
         super().__init__()
-        config = load_config()
-        width = config["DISPLAY"].get("winwidth", 400)
-        height = config["DISPLAY"].get("winheight", 300)
+        display_config = load_config().get("DISPLAY", {})
+        width = display_config.get("winwidth", 400)
+        height = display_config.get("winheight", 300)
         if not isinstance(width, int) or width <= 0:
             width = 400
         if not isinstance(height, int) or height <= 0:

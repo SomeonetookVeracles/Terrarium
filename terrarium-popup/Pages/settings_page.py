@@ -53,7 +53,11 @@ class SettingsPage(QWidget):
         self.api_key_input.setPlaceholderText("Enter Hackatime Api Key")
         self.api_key_input.setText(self.config["GLOBALS"].get("WAKA_API_KEY", ""))
         scroll_layout.addRow(QLabel("Hackatime API Key"), self.api_key_input)
-
+        #* Refresh Rate
+        self.refreshrate = QLineEdit(str(int(self.config["GLOBALS"].get("refreshrate"))))
+        self.refreshrate.setPlaceholderText("Default: 15s")
+        self.refreshrate.textChanged.connect(self.update_refreshrate)
+        scroll_layout.addRow(QLabel("Game TPS"), self.refreshrate)
         #* Width
         self.width_input = QLineEdit(str(int(self.config["DISPLAY"].get("width_ratio", 0.5) * 100)))
         self.width_input.setPlaceholderText("Default: 33%")
@@ -126,23 +130,31 @@ class SettingsPage(QWidget):
                 self.config["DISPLAY"]["height_ratio"] = val / 100.0
         except ValueError:
             pass
-
+    def update_refreshrate(self, value):
+        try:
+                val = int(value)
+                if 1 <= val <= 300:  
+                        self.config["GLOBALS"]["refreshrate"] = val
+        except ValueError:
+                pass 
     #* Apply button logic
     def apply_changes(self):
         self.config["DISPLAY"]["current_theme"] = self.theme_dropdown.currentText()
         self.config["GLOBALS"]["DEVMODE"] = self.debug_checkbox.isChecked()
         self.config["GLOBALS"]["WAKA_API_KEY"] = self.api_key_input.text().strip()
+        self.config["GLOBALS"]["refreshrate"] = self.refreshrate.text()
         save_config(self.config)
         self.apply_theme_immediately()
 
         if self.config.get("GLOBALS", {}).get("DEVMODE", False):
             print("[DEVMODE] Applied config values:")
             print(f" - Width:  {self.config['DISPLAY'].get('width_ratio', 0)}")
+            print(f" - refresh rate: {self.config['GLOBALS'].get('refreshrate', 0)}")
+
             print(f" - Height: {self.config['DISPLAY'].get('height_ratio', 0)}")
             print(f" - Theme:  {self.config['DISPLAY'].get('current_theme', '')}")
             print(f" - DevMode: {self.config['GLOBALS'].get('DEVMODE', False)}")
             print(f" - api.key_input: {self.config['GLOBALS'].get('WAKA_API_KEY', '')}")
-
     #* Reset button logic
     def reset_changes(self):
         defaults = get_default_config()

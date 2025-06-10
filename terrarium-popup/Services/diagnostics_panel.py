@@ -1,5 +1,5 @@
 from PyQt5.QtWidgets import QDialog, QVBoxLayout, QTextEdit, QPushButton
-from Services.logger import get_log
+from Services.data_catcher import get_log
 
 class DiagnosticsPanel(QDialog):
     def __init__(self, parent=None):
