@@ -89,10 +89,16 @@ class PetPage(QWidget):
 
         self.pattern_dropdown = QComboBox()
         self.pattern_dropdown.addItem("None")  # Default
+        self.pattern_dropdown.currentIndexChanged.connect(self.render_pet_preview)
         row_layout.addWidget(self.pattern_dropdown)
 
-        layout2.addStretch()
         layout2.addLayout(row_layout)
+
+        self.appearance_preview = QLabel("Preview will appear here")
+        self.appearance_preview.setAlignment(Qt.AlignCenter)
+        layout2.addWidget(self.appearance_preview)
+
+        layout2.addStretch()
 
         next_btn2 = QPushButton("Next")
         next_btn2.clicked.connect(self.go_to_naming_page)
@@ -124,6 +130,7 @@ class PetPage(QWidget):
     def go_to_appearance_page(self):
         self.pet_type = self.type_dropdown.currentText()
         self.update_pattern_list()
+        self.render_pet_preview()
         self.stack.setCurrentIndex(1)
 
     def pick_color(self):
@@ -131,6 +138,7 @@ class PetPage(QWidget):
         if color.isValid():
             self.base_color = color
             self.color_picker_btn.setText(f"Color: {color.name()}")
+            self.render_pet_preview()
 
     def go_to_naming_page(self):
         choice = self.pattern_dropdown.currentText()
@@ -151,7 +159,6 @@ class PetPage(QWidget):
         save_config(self.config)
         debug_log("Pet saved:", pet_data)
 
-        # Generate gif reading from config
         generate_current_pet_gif()
 
         preview_screen = self.create_pet_preview(pet_data)
@@ -164,7 +171,7 @@ class PetPage(QWidget):
         layout = QVBoxLayout()
         preview_widget.setLayout(layout)
 
-        layout.addWidget(QLabel(f"{pet_data['Name']} the {pet_data['type']}"))
+        layout.addWidget(QLabel(f"{pet_data['Name']}, the {pet_data['type']}"))
 
         image_label = QLabel()
         image_label.setAlignment(Qt.AlignCenter)
@@ -222,3 +229,28 @@ class PetPage(QWidget):
                 self.pattern_dropdown.addItem(pattern_file)
         except Exception as e:
             debug_log("Error reading pattern directory:", str(e))
+
+    def render_pet_preview(self):
+        """Update preview with the current pet configuration."""
+        pet_data = {
+            "type": self.type_dropdown.currentText(),
+            "base_color": self.base_color.name(),
+            "pattern": self.pattern_dropdown.currentText() if self.pattern_dropdown.currentText() != "None" else None,
+            "Name": "Preview",
+            "persona": "N/A"
+        }
+
+        self.config.setdefault("GAME", {})["active-pet"] = pet_data
+        save_config(self.config)
+
+        try:
+            generate_current_pet_gif()
+            gif_path = os.path.join("Visuals", "currentPet.gif")
+            if os.path.exists(gif_path):
+                movie = QMovie(gif_path)
+                self.appearance_preview.setMovie(movie)
+                movie.start()
+            else:
+                self.appearance_preview.setText("Preview image not found.")
+        except Exception as e:
+            self.appearance_preview.setText(f"Preview error: {str(e)}")

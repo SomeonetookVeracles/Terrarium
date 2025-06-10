@@ -28,16 +28,9 @@
                 "content": "/* == Inspired by Dracula for VSC == */\n/* All credits go to original authors https://draculatheme.com/visual-studio-code */\n\n#pygame-surface {\n    background-color: transparent;\n    border: none;\n}\nQWidget {\n    background-color: #282A36;\n    color: #F8F8F2;\n    font-family: 'Segoe UI', sans-serif;\n    font-size: 14px;\n}\n\nQLabel {\n    color: #F1FA8C;\n\n}\nQCheckBox {\n    padding: 6px;\n    color: #F8F8F2;\n}\nQCheckBox::indicator {\n    width: 16px;\n    height: 16px;\n    border-radius: 4px;\n}\nQCheckBox::indicator:checked {\n    background-color: #50FA7B;\n    border: 1px solid #50FA7B;\n}\n\nQCheckBox::indicator:unchecked {\n    background-color: #6272A4;\n    border: 1px solid #6272A4;\n}\n/* Button styling */\nQPushButton {\n    background-color: #6272A4;\n    color: #F8F8F2;\n    border-radius: 6px;\n    padding: 8px 12px;\n    font-weight: bold;\n    border: 1px solid #44475A;\n}\n\nQPushButton:hover {\n    background-color: #BD93F9;\n    border: 1px solid #BD93F9;\n}\nQPushButton:pressed {\n    background-color: #FF79C6;\n    border: 1px solid #FF79C6;\n    color: #282A36;\n}\n/* Input Fields */\nQLineEdit {\n    background-color: #44475A;\n    border: 1px solid #6272A4;\n    color: #F8F8F2;\n    padding: 6px;\n    border-radius: 4px;\n}\nQComboBox {\n    background-color: #44475A;\n    border: 1px solid #6272A4;\n    padding: 6px;\n    color: #F8F8F2;\n    border-radius: 4px;\n}\nQComboBox QAbstractItemView {\n    background-color: #282A36;\n    border: 1px solid #6272A4;\n    selection-background-color: #BD93F9;\n    color: #F8F8F2;\n}\n/* Scrollbar */\nQScrollBar: vertical {\n    background: #282A36;\n    width: 12px;\n}\nQScrollBar::handle:vertical {\n    background: #BD93F9;\n    border-radius: 6px;\n}\nQScrollBar::add-line:vertical,\nQScrollBar::sub-line:vertical {\n    border: none;\n    height: 0px;\n}\n\n/* Slider */\nQSlider::groove:horizontal {\n    height: 6px;\n    background: #6272a4;\n    border-radius: 6px;\n}\n\nQSlider::handle:horizontal {\n    background: #FFB86C;\n    border: none;\n    height: 14px;\n    width: 14px;\n    margin: -5px 0;\n    border-radius: 7px;\n}"
             }
         ],
-        "current_theme": "fluent-Dark"
+        "current_theme": "Nosferatu"
     },
     "GAME": {
-        "active-pet": {
-            "type": "Pet Rock",
-            "base_color": "#ffffff",
-            "pattern": "hat.png",
-            "Name": "e",
-            "persona": "Cheerful"
-        },
         "pettypes": [
             {
                 "name": "Pet Rock",
@@ -69,6 +62,13 @@
             {
                 "name": "Rock"
             }
-        ]
+        ],
+        "active-pet": {
+            "type": "Slime",
+            "base_color": "#ffffff",
+            "pattern": null,
+            "Name": "Preview",
+            "persona": "N/A"
+        }
     }
 }
