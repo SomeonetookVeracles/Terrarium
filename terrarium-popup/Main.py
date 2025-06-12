@@ -1,5 +1,5 @@
 import sys
-import itertools
+from Services.Hackatime_Service import HackatimeService
 import os
 from PyQt5.QtWidgets import (
     QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout,
@@ -7,11 +7,9 @@ from PyQt5.QtWidgets import (
 )
 from PyQt5.QtGui import QIcon, QPixmap, QColor
 from PyQt5.QtCore import Qt, QTimer
-
-from Services.theme_catcher import update_theme_list
 from config_helper import load_config, save_config, debug_log
+from Services.theme_catcher import update_theme_list
 from Services.theme_loader import load_current_theme_stylesheet
-
 # All pages
 from Pages.pet_page import PetPage
 from Pages.settings_page import SettingsPage
@@ -24,7 +22,7 @@ class TerrariumUI(QMainWindow):
         self.sidebar_layout = QVBoxLayout()
         self.init_ui()
         self.init_tray()
-
+        self.hackatime_service = HackatimeService(self)
     def init_ui(self):
         self.setWindowTitle("Terrarium")
         self.setWindowFlags(Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint)

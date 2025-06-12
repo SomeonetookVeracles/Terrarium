@@ -181,19 +181,9 @@ class SettingsPage(QWidget):
     def reset_pet(self):
         config = load_config()
         border_style = "QMessageBox { border: 2px solid #444; border-radius: 8px; background-color: #fff; }"
-        
-        if "GAME" in config and "active-pet" in config["GAME"]:
-            confirm = QMessageBox(self)
-            confirm.setWindowTitle("Reset Pet")
-            confirm.setText("Are you sure you want to delete your pet?")
-            confirm.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
-            confirm.setWindowFlags(Qt.Dialog | Qt.FramelessWindowHint)
-            confirm.setStyleSheet(border_style)
-            confirm.setModal(True)
-            confirm.move(self.geometry().center() - confirm.rect().center())
-            result = confirm.exec_()
 
-            if result == QMessageBox.Yes:
+        if "GAME" in config and "active-pet" in config["GAME"]:
+                # Directly delete the pet without confirmation
                 del config["GAME"]["active-pet"]
                 save_config(config)
                 debug_log("Pet reset from settings page.")
@@ -206,12 +196,13 @@ class SettingsPage(QWidget):
                 info.setModal(True)
                 info.exec_()
 
-                self.petReset.emit()  # reload pet page
+                self.petReset.emit()  # Signal to reload pet page
         else:
-            info = QMessageBox(self)
-            info.setWindowTitle("No Pet")
-            info.setText("There is no pet to reset.")
-            info.setWindowFlags(Qt.Dialog | Qt.FramelessWindowHint)
-            info.setStyleSheet(border_style)
-            info.setModal(True)
-            info.exec_()
+                info = QMessageBox(self)
+                info.setWindowTitle("No Pet")
+                info.setText("There is no pet to reset.")
+                info.setWindowFlags(Qt.Dialog | Qt.FramelessWindowHint)
+                info.setStyleSheet(border_style)
+                info.setModal(True)
+                info.exec_()
+

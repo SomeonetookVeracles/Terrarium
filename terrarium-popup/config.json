@@ -6,7 +6,7 @@
     },
     "GLOBALS": {
         "DEVMODE": true,
-        "WAKA_API_KEY": "",
+        "WAKA_API_KEY": "1f8b128f-eace-45fd-8d36-3ef5c7e15821",
         "refreshrate": "16"
     },
     "DISPLAY": {
@@ -64,8 +64,8 @@
                 "name": "Rock"
             }
         ],
-        "pet_happiness": 98,
-        "pet_nourishment": 98,
-        "pet_recreation": 98
+        "pet_happiness": 44,
+        "pet_nourishment": 14,
+        "pet_recreation": 44
     }
 }

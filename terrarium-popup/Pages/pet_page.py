@@ -1,9 +1,10 @@
 from PyQt5.QtWidgets import (
     QWidget, QVBoxLayout, QStackedWidget, QLabel, QPushButton,
-    QComboBox, QColorDialog, QLineEdit, QFormLayout, QHBoxLayout
+    QComboBox, QColorDialog, QLineEdit, QFormLayout, QHBoxLayout,
+    QGroupBox
 )
 from PyQt5.QtGui import QColor, QMovie
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt, QSize
 import os
 
 from config_helper import load_config, save_config, debug_log
@@ -11,6 +12,13 @@ from Services.sprite_loader import generate_current_pet_gif  # Ensure this reads
 
 
 class PetPage(QWidget):
+    """
+    PetPage manages pet creation and status viewing with a stacked layout:
+    - Pet status display
+    - Pet creation steps: type selection, appearance customization, naming
+    The pet preview GIF is scaled up by 2x for better visibility.
+    """
+
     def __init__(self):
         super().__init__()
         self.config = load_config()
@@ -33,14 +41,34 @@ class PetPage(QWidget):
         else:
             self.init_pet_status(pet_data)
 
+    def reset_pet(self):
+        """Clear the active pet from config and reset UI to pet creator."""
+        if "active-pet" in self.config.get("GAME", {}):
+            del self.config["GAME"]["active-pet"]
+            save_config(self.config)
+            debug_log("Pet reset: active-pet removed from config.")
+        # Remove all widgets from stack and delete them
+        while self.stack.count() > 0:
+            widget = self.stack.widget(0)
+            self.stack.removeWidget(widget)
+            widget.deleteLater()
+        self.init_pet_creator()
+
     def init_pet_status(self, pet_data):
         status_screen = QWidget()
         layout = QVBoxLayout()
         status_screen.setLayout(layout)
 
-        layout.addWidget(QLabel(f"Name: {pet_data.get('Name', 'Unnamed')}"))
-        layout.addWidget(QLabel(f"Type: {pet_data.get('type', 'Unknown')}"))
-        layout.addWidget(QLabel(f"Personality: {pet_data.get('persona', 'N/A')}"))
+        # Group box to fold labels neatly
+        info_box = QGroupBox("Pet Information")
+        info_layout = QVBoxLayout()
+        info_box.setLayout(info_layout)
+
+        info_layout.addWidget(QLabel(f"Name: {pet_data.get('Name', 'Unnamed')}"))
+        info_layout.addWidget(QLabel(f"Type: {pet_data.get('type', 'Unknown')}"))
+        info_layout.addWidget(QLabel(f"Personality: {pet_data.get('persona', 'N/A')}"))
+
+        layout.addWidget(info_box, alignment=Qt.AlignTop)
 
         movie = self.compose_pet_image(pet_data)
         img_label = QLabel()
@@ -52,7 +80,12 @@ class PetPage(QWidget):
         else:
             img_label.setText("Image not found.")
 
-        layout.addWidget(img_label, alignment=Qt.AlignCenter)
+        layout.addWidget(img_label, alignment=Qt.AlignTop)
+
+        # Optional: add a Reset Pet button here to allow reset
+        reset_btn = QPushButton("Reset Pet")
+        reset_btn.clicked.connect(self.reset_pet)
+        layout.addWidget(reset_btn, alignment=Qt.AlignCenter)
 
         self.stack.addWidget(status_screen)
         self.stack.setCurrentIndex(0)
@@ -79,28 +112,36 @@ class PetPage(QWidget):
         layout2 = QVBoxLayout()
         appearance.setLayout(layout2)
 
-        row_layout = QHBoxLayout()
-
-        self.color_picker_btn = QPushButton("Pick Base Color")
-        self.color_picker_btn.clicked.connect(self.pick_color)
-        row_layout.addWidget(self.color_picker_btn)
-
-        self.pattern_dropdown = QComboBox()
-        self.pattern_dropdown.addItem("None")  # Default
-        self.pattern_dropdown.currentIndexChanged.connect(self.render_pet_preview)
-        row_layout.addWidget(self.pattern_dropdown)
-
-        layout2.addLayout(row_layout)
-
+        # Preview label
         self.appearance_preview = QLabel("Preview will appear here")
         self.appearance_preview.setAlignment(Qt.AlignCenter)
         layout2.addWidget(self.appearance_preview)
 
-        layout2.addStretch()
+        # Controls at bottom: Color picker and pattern dropdown side-by-side
+        controls_layout = QHBoxLayout()
 
+        self.color_picker_btn = QPushButton("Pick Base Color")
+        self.color_picker_btn.clicked.connect(self.pick_color)
+        controls_layout.addWidget(self.color_picker_btn)
+
+        self.pattern_dropdown = QComboBox()
+        self.pattern_dropdown.addItem("None")  # Default
+        self.pattern_dropdown.currentIndexChanged.connect(self.render_pet_preview)
+        controls_layout.addWidget(self.pattern_dropdown)
+
+        layout2.addLayout(controls_layout)
+
+        # Navigation buttons row below controls
+        nav_buttons_layout = QHBoxLayout()
+        back_btn2 = QPushButton("Back")
         next_btn2 = QPushButton("Next")
+        back_btn2.clicked.connect(lambda: self.stack.setCurrentIndex(0))
         next_btn2.clicked.connect(self.go_to_naming_page)
-        layout2.addWidget(next_btn2, alignment=Qt.AlignRight)
+        nav_buttons_layout.addWidget(back_btn2)
+        nav_buttons_layout.addStretch()
+        nav_buttons_layout.addWidget(next_btn2)
+
+        layout2.addLayout(nav_buttons_layout)
 
         # Page 3: Name and personality
         name_screen = QWidget()
@@ -115,9 +156,18 @@ class PetPage(QWidget):
         form.addRow(QLabel("Pet Name:"), self.name_input)
         form.addRow(QLabel("Personality:"), self.persona_input)
 
+        btn_row3 = QHBoxLayout()
+        back_btn3 = QPushButton("Back")
         finish_btn = QPushButton("Finish")
+
+        back_btn3.clicked.connect(lambda: self.stack.setCurrentIndex(1))
         finish_btn.clicked.connect(self.finish_creation)
-        form.addRow(finish_btn)
+
+        btn_row3.addWidget(back_btn3)
+        btn_row3.addStretch()
+        btn_row3.addWidget(finish_btn)
+
+        form.addRow(btn_row3)
 
         # Add pages to stack
         self.stack.addWidget(type_select)   # 0
@@ -144,6 +194,7 @@ class PetPage(QWidget):
         self.stack.setCurrentIndex(2)
 
     def finish_creation(self):
+        # Build new pet data
         pet_data = {
             "type": self.pet_type,
             "base_color": self.base_color.name(),
@@ -152,22 +203,40 @@ class PetPage(QWidget):
             "persona": self.persona_input.currentText().strip()
         }
 
+        # Reset existing pet data before saving new pet
+        if "active-pet" in self.config.get("GAME", {}):
+            del self.config["GAME"]["active-pet"]
+
         self.config.setdefault("GAME", {})["active-pet"] = pet_data
         save_config(self.config)
         debug_log("Pet saved:", pet_data)
 
         generate_current_pet_gif()
 
+        # Remove old preview/status widgets to avoid stack buildup
+        while self.stack.count() > 0:
+            widget = self.stack.widget(0)
+            self.stack.removeWidget(widget)
+            widget.deleteLater()
+
         preview_screen = self.create_pet_preview(pet_data)
         self.stack.addWidget(preview_screen)
-        self.stack.setCurrentIndex(self.stack.count() - 1)
+        self.stack.setCurrentIndex(0)
 
     def create_pet_preview(self, pet_data):
         preview_widget = QWidget()
         layout = QVBoxLayout()
         preview_widget.setLayout(layout)
 
-        layout.addWidget(QLabel(f"{pet_data['Name']}, the {pet_data['type']}"))
+        info_box = QGroupBox("Pet Summary")
+        info_layout = QVBoxLayout()
+        info_box.setLayout(info_layout)
+
+        info_layout.addWidget(QLabel(f"Name: {pet_data['Name']}"))
+        info_layout.addWidget(QLabel(f"Type: {pet_data['type']}"))
+        info_layout.addWidget(QLabel(f"Personality: {pet_data['persona']}"))
+
+        layout.addWidget(info_box, alignment=Qt.AlignTop)
 
         image_label = QLabel()
         image_label.setAlignment(Qt.AlignCenter)
@@ -179,14 +248,17 @@ class PetPage(QWidget):
         else:
             image_label.setText("Image not found.")
 
-        layout.addWidget(image_label)
+        layout.addWidget(image_label, alignment=Qt.AlignTop)
         return preview_widget
 
     def compose_pet_image(self, pet_data):
         try:
             gif_path = os.path.join("Visuals", "currentPet.gif")
             if os.path.exists(gif_path):
-                return QMovie(gif_path)
+                movie = QMovie(gif_path)
+                # Scale movie 2x
+                movie.setScaledSize(QSize(64, 64) * 2)
+                return movie
             debug_log("currentPet.gif not found.")
             return None
         except Exception as e:
@@ -241,6 +313,7 @@ class PetPage(QWidget):
             gif_path = os.path.join("Visuals", "currentPet.gif")
             if os.path.exists(gif_path):
                 movie = QMovie(gif_path)
+                movie.setScaledSize(QSize(64, 64) * 2)  # scale preview 2x here too
                 self.appearance_preview.setMovie(movie)
                 movie.start()
             else:
