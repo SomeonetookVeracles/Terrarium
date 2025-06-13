@@ -1,0 +1,12 @@
+{
+    "active_pet": {
+        "type": "rock",
+        "name": "Rock",
+        "description": "A sturdy and reliable companion",
+        "sprite_path": "Visuals/rock_pet.gif",
+        "created_at": 1749719752.7588673,
+        "happiness": 50,
+        "nourishment": 50,
+        "recreation": 50
+    }
+}

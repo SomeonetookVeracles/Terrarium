@@ -1,5 +1,5 @@
 import sys
-from Services.Hackatime_Service import HackatimeService
+from Services.Hakatime_service import WakatimeService
 import os
 from PyQt5.QtWidgets import (
     QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout,
@@ -22,7 +22,7 @@ class TerrariumUI(QMainWindow):
         self.sidebar_layout = QVBoxLayout()
         self.init_ui()
         self.init_tray()
-        self.hackatime_service = HackatimeService(self)
+        self.hackatime_service = WakatimeService(self)
     def init_ui(self):
         self.setWindowTitle("Terrarium")
         self.setWindowFlags(Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint)
