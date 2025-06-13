@@ -3,6 +3,7 @@ from datetime import datetime, timezone, timedelta
 import json
 import os
 import traceback
+from PyQt5.QtCore import QTimer
 from config_helper import debug_log, load_config, save_config
 
 class WakatimeService:

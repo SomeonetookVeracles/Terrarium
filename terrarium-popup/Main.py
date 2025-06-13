@@ -1,6 +1,6 @@
+import os
 import sys
 from Services.Hakatime_service import WakatimeService
-import os
 from PyQt5.QtWidgets import (
     QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout,
     QPushButton, QStackedWidget, QSystemTrayIcon, QMenu, QAction, QGraphicsDropShadowEffect
@@ -69,8 +69,6 @@ class TerrariumUI(QMainWindow):
         shadow_wrapper.setLayout(wrapper_layout)
 
         self.setCentralWidget(shadow_wrapper)
-
-        self.setCentralWidget(container)
         # Debug flagging
         print("Pages count:", self.pages.count())
         print("Window geometry:", self.geometry())
@@ -137,12 +135,9 @@ class TerrariumUI(QMainWindow):
 if __name__ == "__main__":
     # Update themes at startup
     update_theme_list()
-
     app = QApplication(sys.argv)
-
-    # Apply current theme's stylesheet
-    app.setStyleSheet(load_current_theme_stylesheet())
-
     window = TerrariumUI()
     window.show()
+    # Apply current theme's stylesheet
+    app.setStyleSheet(load_current_theme_stylesheet())
     sys.exit(app.exec_())
