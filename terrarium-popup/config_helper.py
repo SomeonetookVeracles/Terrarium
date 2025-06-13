@@ -53,11 +53,10 @@ def load_config():
         print(f"[ERROR] Unexpected error while loading config")
         traceback.print_exc()
         return {}
-def debug_log(*args, **kwargs):
-    #Prints only if DEVMODE is enabled
-    config = load_config()
-    if config.get("GLOBALS", {}).get("DEVMODE", False):
-        print("[DEBUG]", *args, **kwargs)
+def debug_log(*args, level="info", **kwargs):
+    """Log debug messages with optional level"""
+    prefix = f"[{level.upper()}]"
+    print(prefix, *args, **kwargs)
 def save_config(config_data):
     #Attempt to save, if failed, preserve existing data
     try:

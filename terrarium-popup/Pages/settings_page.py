@@ -47,36 +47,25 @@ class SettingsPage(QWidget):
         scroll_layout = QFormLayout()
         scroll_layout.setSpacing(12)
 
-        #* API Key
-        self.api_key_input = QLineEdit()
-        self.api_key_input.setEchoMode(QLineEdit.Password)
-        self.api_key_input.setPlaceholderText("Enter Hackatime Api Key")
-        self.api_key_input.setText(self.config["GLOBALS"].get("WAKA_API_KEY", ""))
-        scroll_layout.addRow(QLabel("Hackatime API Key"), self.api_key_input)
-        #* Refresh Rate
-        self.refreshrate = QLineEdit(str(int(self.config["GLOBALS"].get("refreshrate"))))
-        self.refreshrate.setPlaceholderText("Default: 15s")
-        self.refreshrate.textChanged.connect(self.update_refreshrate)
-        scroll_layout.addRow(QLabel("Game TPS"), self.refreshrate)
-        #* Width
-        self.width_input = QLineEdit(str(int(self.config["DISPLAY"].get("width_ratio", 0.5) * 100)))
-        self.width_input.setPlaceholderText("Default: 33%")
+        #* Width ratio input
+        self.width_input = QLineEdit()
+        self.width_input.setText(str(int(self.config["DISPLAY"].get("width_ratio", 0.8) * 100)))
         self.width_input.textChanged.connect(self.update_width_ratio)
-        scroll_layout.addRow(QLabel("% width of screen"), self.width_input)
+        scroll_layout.addRow(QLabel("Width Ratio (%)"), self.width_input)
 
-        #* Height
-        self.height_input = QLineEdit(str(int(self.config["DISPLAY"].get("height_ratio", 0.5) * 100)))
-        self.height_input.setPlaceholderText("Default: 50%")
+        #* Height ratio input
+        self.height_input = QLineEdit()
+        self.height_input.setText(str(int(self.config["DISPLAY"].get("height_ratio", 0.8) * 100)))
         self.height_input.textChanged.connect(self.update_height_ratio)
-        scroll_layout.addRow(QLabel("% height of screen"), self.height_input)
+        scroll_layout.addRow(QLabel("Height Ratio (%)"), self.height_input)
 
         #* Theme dropdown
         self.theme_dropdown = QComboBox()
-        self.themes = self.config["DISPLAY"].get("THEMES", [])
-        current_theme = self.config["DISPLAY"].get("current_theme", "")
-        for theme in self.themes:
+        all_themes = self.config.get("DISPLAY", {}).get("THEMES", [])
+        for theme in all_themes:
             self.theme_dropdown.addItem(theme["name"])
-        index = self.theme_dropdown.findText(current_theme)
+
+        index = self.theme_dropdown.findText(self.config["DISPLAY"].get("current_theme", "fluent-Dark"))
         if index >= 0:
             self.theme_dropdown.setCurrentIndex(index)
         scroll_layout.addRow(QLabel("Select Theme"), self.theme_dropdown)
@@ -86,11 +75,6 @@ class SettingsPage(QWidget):
         self.debug_checkbox = QCheckBox("Enable developer mode (NOT RECOMMENDED)")
         self.debug_checkbox.setChecked(self.config["GLOBALS"].get("DEVMODE", False))
         scroll_layout.addRow(self.debug_checkbox)
-
-        #* Reset Pet Button
-        pet_resetbtn = QPushButton("Reset Pet")
-        pet_resetbtn.clicked.connect(self.reset_pet)
-        scroll_layout.addRow(pet_resetbtn)
 
         #* Apply/Reset buttons
         button_layout = QHBoxLayout()
@@ -130,31 +114,14 @@ class SettingsPage(QWidget):
                 self.config["DISPLAY"]["height_ratio"] = val / 100.0
         except ValueError:
             pass
-    def update_refreshrate(self, value):
-        try:
-                val = int(value)
-                if 1 <= val <= 300:  
-                        self.config["GLOBALS"]["refreshrate"] = val
-        except ValueError:
-                pass 
+
     #* Apply button logic
     def apply_changes(self):
         self.config["DISPLAY"]["current_theme"] = self.theme_dropdown.currentText()
         self.config["GLOBALS"]["DEVMODE"] = self.debug_checkbox.isChecked()
-        self.config["GLOBALS"]["WAKA_API_KEY"] = self.api_key_input.text().strip()
-        self.config["GLOBALS"]["refreshrate"] = self.refreshrate.text()
         save_config(self.config)
         self.apply_theme_immediately()
 
-        if self.config.get("GLOBALS", {}).get("DEVMODE", False):
-            print("[DEVMODE] Applied config values:")
-            print(f" - Width:  {self.config['DISPLAY'].get('width_ratio', 0)}")
-            print(f" - refresh rate: {self.config['GLOBALS'].get('refreshrate', 0)}")
-
-            print(f" - Height: {self.config['DISPLAY'].get('height_ratio', 0)}")
-            print(f" - Theme:  {self.config['DISPLAY'].get('current_theme', '')}")
-            print(f" - DevMode: {self.config['GLOBALS'].get('DEVMODE', False)}")
-            print(f" - api.key_input: {self.config['GLOBALS'].get('WAKA_API_KEY', '')}")
     #* Reset button logic
     def reset_changes(self):
         defaults = get_default_config()
@@ -173,36 +140,4 @@ class SettingsPage(QWidget):
 
         save_config(self.config)
         self.apply_theme_immediately()
-
-        if self.config["GLOBALS"].get("DEVMODE", False):
-            print("[DEVMODE] Reset to default config.")
-
-    #* Pet reset logic w/ confirmation
-    def reset_pet(self):
-        config = load_config()
-        border_style = "QMessageBox { border: 2px solid #444; border-radius: 8px; background-color: #fff; }"
-
-        if "GAME" in config and "active-pet" in config["GAME"]:
-                # Directly delete the pet without confirmation
-                del config["GAME"]["active-pet"]
-                save_config(config)
-                debug_log("Pet reset from settings page.")
-
-                info = QMessageBox(self)
-                info.setWindowTitle("Pet Reset")
-                info.setText("Your pet has been deleted.")
-                info.setWindowFlags(Qt.Dialog | Qt.FramelessWindowHint)
-                info.setStyleSheet(border_style)
-                info.setModal(True)
-                info.exec_()
-
-                self.petReset.emit()  # Signal to reload pet page
-        else:
-                info = QMessageBox(self)
-                info.setWindowTitle("No Pet")
-                info.setText("There is no pet to reset.")
-                info.setWindowFlags(Qt.Dialog | Qt.FramelessWindowHint)
-                info.setStyleSheet(border_style)
-                info.setModal(True)
-                info.exec_()
 

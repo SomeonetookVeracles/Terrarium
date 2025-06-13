@@ -6,7 +6,7 @@
     },
     "GLOBALS": {
         "DEVMODE": true,
-        "WAKA_API_KEY": "1f8b128f-eace-45fd-8d36-3ef5c7e15821",
+        "WAKA_API_KEY": "",
         "refreshrate": "16"
     },
     "DISPLAY": {
@@ -48,31 +48,35 @@
                 "addons": []
             },
             {
-                "name": "Cat",
+                "name": "[NONFUNCTIONAL]Cat",
                 "sprite_path": "Visuals/Sprites/Cat",
                 "addons": []
             }
         ],
         "personatypes": [
             {
-                "name": "Cheerful"
+                "name": "[NONFUNCTIONAL]Cheerful"
             },
             {
-                "name": "Grumpy"
+                "name": "[NONFUNCTIONAL]Grumpy"
             },
             {
-                "name": "Rock"
+                "name": "[NONFUNCTIONAL]Rock"
             }
         ],
         "pet_happiness": 44,
-        "pet_nourishment": 6,
+        "pet_nourishment": 3,
         "pet_recreation": 44,
         "active-pet": {
-            "type": "Cat",
+            "type": "Pet Rock",
             "base_color": "#ffffff",
-            "pattern": null,
-            "Name": "Preview",
-            "persona": "N/A"
+            "pattern": "suit.png",
+            "Name": "Dwayne",
+            "persona": "Cheerful",
+            "nourishment": 30
         }
+    },
+    "WAKATIME": {
+        "last_check_time": "2025-06-13T15:08:35.451098+00:00"
     }
 }
